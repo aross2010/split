@@ -15,7 +15,8 @@ const config: Config = {
       },
     },
     fontFamily: {
-      prompt: ['--font-prompt'],
+      outfit: ['var(--font-outfit)'],
+      inter: ['var(--font-inter)'],
     },
   },
   plugins: [],

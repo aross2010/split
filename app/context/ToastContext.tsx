@@ -12,6 +12,8 @@ export default function ToastContext() {
           style: {
             width: '100%',
             maxWidth: '400px',
+            backgroundColor: '#374151',
+            color: '#F9FAFB',
           },
         }}
       />

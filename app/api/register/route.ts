@@ -7,9 +7,26 @@ export async function POST(request: Request) {
 
   if (!data) return
 
-  const { name, email, password } = data
-  if (!name || !email || !password) {
-    return NextResponse.json({ error: 'Missing Fields.' }, { status: 400 })
+  const { name, email, password, confirmPassword } = data
+  if (!name || !email || !password || !confirmPassword) {
+    return NextResponse.json(
+      { error: 'Please complete all fields' },
+      { status: 400 }
+    )
+  }
+
+  if (password !== confirmPassword) {
+    return NextResponse.json(
+      { error: 'Passwords do not match.' },
+      { status: 400 }
+    )
+  }
+
+  if (password.length < 8) {
+    return NextResponse.json(
+      { error: 'Password must be at least 8 characters long.' },
+      { status: 400 }
+    )
   }
 
   const exists = await prisma.user.findUnique({

@@ -22,21 +22,18 @@ export const authOptions = {
     Credentials({
       name: 'credentials',
       credentials: {
-        email: { label: 'Email', type: 'text', placeholder: 'jsmith' },
+        email: { label: 'Email', type: 'text', placeholder: '' },
         password: { label: 'Password', type: 'password' },
-        username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
+        username: { label: 'name', type: 'text', placeholder: '' },
       },
       async authorize(credentials): Promise<any> {
         if (!credentials || !credentials.email || !credentials.password)
           throw new Error('Please enter an email and password')
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         })
-
         if (!user || !user?.password)
           throw new Error('No user found with email')
-
         const passwordsMatch = await bcrypt.compare(
           credentials.password,
           user.password

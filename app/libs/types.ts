@@ -7,12 +7,12 @@ export type Session = {
   }
 }
 
-export type LoginUserType = {
+export type LoginUserData = {
   email: string
   password: string
 }
 
-export type RegisterUserType = {
+export type RegisterUserData = {
   name: string
   email: string
   password: string
