@@ -13,10 +13,6 @@ const links = [
     label: 'Exercises',
     href: '/exercises',
   },
-  {
-    label: 'Weight',
-    href: '/weight',
-  },
 ]
 
 export default async function Navbar() {

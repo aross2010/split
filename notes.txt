@@ -23,7 +23,8 @@ Features to add:
 - Make add exercise and add set full width buttons
 - Increament chart by 2.5 or 5 lbs (for exercise progression chart)
 - Use select tag for picking an option if possible
-- New color scheme / branding & Font
+- Show number of total workouts on workouts page
+- Have weight soley on home page
 - PWAs
 
 Low Priority Features:
@@ -34,6 +35,9 @@ Low Priority Features:
 - Special icons for holidays
 - Auto save feature (idle for x amount of time when editing)
 - Animate filters when they appear
+
+Exercises Page:
+- Add first time doing, link to recent workout doing, graph, total workouts, reps, sets, PR, 
 
 
 Etc: 

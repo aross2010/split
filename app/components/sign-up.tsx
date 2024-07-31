@@ -55,6 +55,22 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
     }
   }
 
+  const renderedInputs = signUpInputs.map((input, i) => {
+    return (
+      <div
+        key={i}
+        className="flex flex-col gap-2"
+      >
+        <label htmlFor={input.name}>{input.label}</label>
+        <TextInput
+          type={input.type}
+          name={input.name}
+          id={input.name}
+        />
+      </div>
+    )
+  })
+
   return (
     <section
       className="p-4"
@@ -65,21 +81,7 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
         className="flex flex-col gap-6 mb-4"
         action={registerUser}
       >
-        {signUpInputs.map((input, i) => {
-          return (
-            <div
-              key={i}
-              className="flex flex-col gap-2"
-            >
-              <label htmlFor={input.name}>{input.label}</label>
-              <TextInput
-                type={input.type}
-                name={input.name}
-                id={input.name}
-              />
-            </div>
-          )
-        })}
+        {renderedInputs}
         <SubmitButton>Sign up</SubmitButton>
       </form>
       <span className="block mb-4">

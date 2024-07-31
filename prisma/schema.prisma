@@ -17,7 +17,7 @@ model User {
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
 
-    workoutIds     String[]
+    workouts       Workout[]
     weightEntryIds String[]
     accounts       Account[]
 }
@@ -42,13 +42,49 @@ model Account {
 }
 
 model Workout {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    id         String       @id @default(auto()) @map("_id") @db.ObjectId
+    typeId     String?      @db.ObjectId
+    type       WorkoutName? @relation(fields: [typeId], references: [id])
+    date       DateTime
+    locationId String?      @db.ObjectId
+    location   Location?    @relation(fields: [locationId], references: [id])
+    exercises  Exercise[]
+    notes      String?
+    userId     String       @db.ObjectId
+    user       User         @relation(fields: [userId], references: [id])
+}
+
+model Exercise {
+    id           String       @id @default(auto()) @map("_id") @db.ObjectId
+    typeId       String       @db.ObjectId
+    type         ExerciseName @relation(fields: [typeId], references: [id])
+    workoutId    String       @db.ObjectId
+    workout      Workout      @relation(fields: [workoutId], references: [id])
+    sets         Json?
+    dropsets     Json?
+    supersetWith Json? // Exercise[]
+    userId       String       @db.ObjectId
+}
+
+model ExerciseName {
+    id        String     @id @default(auto()) @map("_id") @db.ObjectId
     name      String
-    date      DateTime
-    location  String?
-    notes     String?
-    exercises Json
-    userId    String   @db.ObjectId
+    exercises Exercise[]
+    userId    String     @db.ObjectId
+}
+
+model WorkoutName {
+    id       String    @id @default(auto()) @map("_id") @db.ObjectId
+    name     String
+    workouts Workout[]
+    userId   String    @db.ObjectId
+}
+
+model Location {
+    id       String    @id @default(auto()) @map("_id") @db.ObjectId
+    name     String
+    userId   String    @db.ObjectId
+    workouts Workout[]
 }
 
 model WeightEntry {

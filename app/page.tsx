@@ -11,7 +11,7 @@ export default async function Home() {
   const name = session.user.name
 
   return (
-    <section>
+    <section className="w-full">
       <h1 className="text-4xl font-medium">Welcome, {name.split(' ')[0]}.</h1>
     </section>
   )

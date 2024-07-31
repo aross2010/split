@@ -4,6 +4,7 @@ import GoogleAuth from './ui/google-auth'
 import { handleLogin } from '../functions/handle-login'
 import { redirect } from 'next/navigation'
 import { LoginUserData } from '../libs/types'
+import SubmitButton from './ui/submit-btn'
 
 const signInInputs = [
   {
@@ -56,12 +57,7 @@ export default function SignIn({ setIsSignIn, isSignIn }: SignInProps) {
             </div>
           )
         })}
-        <button
-          type="submit"
-          className="bg-violet-400 text-white rounded-md p-3 hover:brightness-110 transition-all"
-        >
-          Sign in
-        </button>
+        <SubmitButton>Sign in</SubmitButton>
       </form>
       <span className="block mb-4">
         Don't have an account?{' '}

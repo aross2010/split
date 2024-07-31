@@ -18,32 +18,39 @@ export type RegisterUserData = {
   password: string
 }
 
+export type Location = {
+  id: string
+  name: string
+}
+
+export type WorkoutName = {
+  id: string
+  name: string
+}
+
 export type Set = {
   sets: number
   reps?: number
+  partialReps?: number
   weight?: number
   RPE?: number
-  name?: string // for super sets
 }
 
 export type Exercise = {
+  id: string
   name: string
   sets?: Set[]
   dropsets?: Set[]
-}
-
-export type SuperSetExercise = {
-  name: string[]
-  sets?: Set[]
-  dropsets?: Set[]
+  superSetWith?: Exercise
 }
 
 export type Workout = {
   id: string
-  name: string
+  name: WorkoutName
   date: Date
+  location: Location
   notes: string
-  exercises: Exercise[] | SuperSetExercise[]
+  exercises: Exercise[]
 }
 
 // set will have partials reps within one set

@@ -23,3 +23,7 @@
   transform: translateY(-50%);
   @apply border-b border-b-gray-600;
 }
+
+.react-datepicker__input-container input {
+  @apply w-full bg-gray-700 outline-none rounded-md p-3 focus:outline-violet-400 focus:bg-violet-400/25 focus:ring-2 focus:ring-violet-400 shadow-sm;
+}
