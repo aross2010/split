@@ -10,7 +10,7 @@ export default async function NewWorkout() {
 
   return (
     <section className="flex flex-col items-center w-full max-w-[600px]">
-      <h1 className="text-center text-3xl font-medium mb-4">New Workout</h1>
+      <h1 className="text-center text-3xl font-medium mb-12">New Workout</h1>
       <WorkoutForm />
     </section>
   )

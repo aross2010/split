@@ -29,22 +29,29 @@ export type WorkoutName = {
 }
 
 export type Set = {
-  sets: number
-  reps?: number
-  partialReps?: number
-  weight?: number
-  RPE?: number
+  sets: number | null
+  reps?: number | null
+  partialReps?: number | null
+  weight?: number | null
+  rpe?: number | null
 }
 
 export type Exercise = {
-  id: string
+  id?: string
   name: string
   sets?: Set[]
   dropsets?: Set[]
-  superSetWith?: Exercise
+  inSuperSet?: boolean
 }
 
-export type Workout = {
+export type WorkoutData = {
+  name: string
+  location: string
+  notes: string
+  supersets: Exercise[][]
+}
+
+export type WorkoutInDib = {
   id: string
   name: WorkoutName
   date: Date

@@ -62,7 +62,8 @@ model Exercise {
     workout      Workout      @relation(fields: [workoutId], references: [id])
     sets         Json?
     dropsets     Json?
-    supersetWith Json? // Exercise[]
+    supersetWith Json? // Exercise[] this field will be used if the exercise is first in the superset
+    supersetBy   Json? // Exercise[]
     userId       String       @db.ObjectId
 }
 

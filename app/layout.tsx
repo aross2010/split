@@ -32,7 +32,7 @@ export default function RootLayout({
         <AuthProvider>
           <ToastContext />
           <Navbar />
-          <main className="w-full max-w-[1200px] flex justify-center mt-16">
+          <main className="w-full max-w-[1200px] flex justify-center my-16">
             {children}
           </main>
           <Footer />

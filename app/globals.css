@@ -27,3 +27,19 @@
 .react-datepicker__input-container input {
   @apply w-full bg-gray-700 outline-none rounded-md p-3 focus:outline-violet-400 focus:bg-violet-400/25 focus:ring-2 focus:ring-violet-400 shadow-sm;
 }
+
+/* Chrome, Safari, Edge */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='checkbox']:checked + label {
+  @apply text-white bg-violet-400;
+}
