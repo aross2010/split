@@ -42,3 +42,7 @@ Exercises Page:
 
 Etc: 
 - ADD a README providing steps to download into mobile and desktop apps
+
+
+
+ADD EXERCISE, scroll down to the new one

@@ -28,7 +28,15 @@ export default function Modal({ children, button, onClose }: ModalProps) {
 
   useEffect(() => {
     const closeModal = (e: MouseEvent) => {
-      if (isOpen && ref.current && !ref.current.contains(e.target as Node)) {
+      if (
+        isOpen &&
+        ref.current &&
+        !ref.current.contains(e.target as Node) &&
+        document.contains(e.target as Node) // check if the target is still in the document, sometimes it gets removed after being clicked and doesnt register as a child of the modal
+      ) {
+        console.log(e.target)
+        console.log(ref.current)
+        console.log('closing...')
         close()
       }
     }
@@ -44,10 +52,10 @@ export default function Modal({ children, button, onClose }: ModalProps) {
     <Fragment>
       {isOpen && (
         <Fragment>
-          <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+          <div className="fixed inset-0 bg-black bg-opacity-40"></div>
           <div
             ref={ref}
-            className="fixed flex flex-col overflow-y-auto top-0 sm:top-1/2 left-1/2 transform -translate-x-1/2 sm:-translate-y-1/2 sm:h-auto h-screen bg-gray-700 p-3 sm:rounded-md shadow-lg z-20 w-full max-w-[500px]"
+            className="fixed flex flex-col overflow-y-auto top-0 sm:top-1/2 left-1/2 transform -translate-x-1/2 sm:-translate-y-1/2 sm:h-auto h-screen bg-gray-700 px-4 py-2 sm:rounded-md shadow-lg z-20 w-full max-w-[450px]"
           >
             <button
               onClick={close}

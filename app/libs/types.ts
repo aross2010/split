@@ -37,7 +37,7 @@ export type Set = {
 }
 
 export type Exercise = {
-  id?: string
+  id: string
   name: string
   sets?: Set[]
   dropsets?: Set[]

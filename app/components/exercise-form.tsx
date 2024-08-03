@@ -3,6 +3,7 @@ import TextInput from './ui/text-input'
 import { Exercise } from '../libs/types'
 import { FaMinusCircle } from 'react-icons/fa'
 import Modal from './ui/modal'
+import Button from './ui/button'
 
 type ExerciseFormProps = {
   exercises: Exercise[]
@@ -127,54 +128,8 @@ export default function ExerciseForm({
     )
   })
 
-  //   const superSetModalContent = (
-  //     <Fragment>
-  //       <h3 className="text-l mb-6">
-  //         Which Exercise(s) would you like to superset{' '}
-  //         <span className="font-medium">{exercises[index].name}</span> with?
-  //       </h3>
-  //       <ul className="flex flex-col gap-4">
-  //         {exercises.map((exercise, i) => {
-  //           if (i !== index) {
-  //             return (
-  //               <li
-  //                 key={i}
-  //                 className="flex items-center gap-2"
-  //               >
-  //                 <input
-  //                   type="checkbox"
-  //                   id={exercise.name}
-  //                   checked={exercises[index].superSetWith?.includes(exercise)}
-  //                   onChange={(e) => {
-  //                     const newExercises = [...exercises]
-  //                     if (e.target.checked) {
-  //                       newExercises[index].superSetWith.push(exercise)
-  //                     } else {
-  //                       newExercises[index].superSetWith = newExercises[
-  //                         index
-  //                       ].superSetWith?.filter((e) => e !== exercise)
-  //                     }
-  //                     console.log('IN MODAL CHANGE', newExercises)
-  //                     setExercises(newExercises)
-  //                   }}
-  //                   hidden
-  //                 />
-  //                 <label
-  //                   className="rounded-full bg-gray-600 py-2 px-4 text-sm hover:brightness-110 transition-all cursor-pointer user-select-none"
-  //                   htmlFor={exercise.name}
-  //                 >
-  //                   {exercise.name}
-  //                 </label>
-  //               </li>
-  //             )
-  //           }
-  //         })}
-  //       </ul>
-  //     </Fragment>
-  //   )
-
   return (
-    <section className="bg-gray-800 p-4 rounded-md flex flex-col">
+    <section className="bg-gray-800 p-3 rounded-md flex flex-col">
       <div hidden={!isOpen}>
         <div className="flex flex-col gap-2 mb-6">
           <label htmlFor="exerciseName">Exercise Name</label>
@@ -225,14 +180,18 @@ export default function ExerciseForm({
           Delete
         </button>
       </div>
-      <div hidden={isOpen}>
-        <button
+      <div
+        className={`${isOpen ? 'hidden' : 'flex'} justify-between items-center`}
+        hidden={isOpen}
+      >
+        <h3 className="text-lg">{exercises[index].name}</h3>
+        <Button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="mr-auto w-fit mt-6 underline underline-offset-2 text-sm text-gray-400"
+          className="!w-fit underline underline-offset-2 text-sm text-gray-400"
         >
-          Open
-        </button>
+          Edit
+        </Button>
       </div>
     </section>
   )
