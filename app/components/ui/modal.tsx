@@ -34,9 +34,6 @@ export default function Modal({ children, button, onClose }: ModalProps) {
         !ref.current.contains(e.target as Node) &&
         document.contains(e.target as Node) // check if the target is still in the document, sometimes it gets removed after being clicked and doesnt register as a child of the modal
       ) {
-        console.log(e.target)
-        console.log(ref.current)
-        console.log('closing...')
         close()
       }
     }

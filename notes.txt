@@ -44,5 +44,6 @@ Etc:
 - ADD a README providing steps to download into mobile and desktop apps
 
 
-
-ADD EXERCISE, scroll down to the new one
+- partial reps stored and displayed lightly
+- dropset -> if an exercise is in a superset, dont allow
+- else -> need at least two sets to dropset

@@ -10,7 +10,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`rounded-md p-3 [&:not(:disabled)]:hover:brightness-125 [&:not(:disabled)]:active:brightness-125 disabled:opacity-50 disabled:cursor-not-allowed transition-all w-full ${className}`}
+        className={`rounded-md select-none p-3 [&:not(:disabled)]:hover:brightness-125 [&:not(:disabled)]:active:brightness-125  disabled:opacity-50 disabled:cursor-not-allowed transition-all w-full ${className}`}
         {...rest}
       >
         {children}

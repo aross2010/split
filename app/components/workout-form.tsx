@@ -1,12 +1,20 @@
 'use client'
-import { Fragment, use, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEventHandler,
+  Fragment,
+  use,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import TextInput from './ui/text-input'
 import ExerciseForm from './exercise-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { Exercise, WorkoutData } from '../libs/types'
+import { Exercise, Set, WorkoutData } from '../libs/types'
 import Modal from './ui/modal'
 import Button from './ui/button'
+import toast from 'react-hot-toast'
 
 const inputs = [
   {
@@ -30,16 +38,18 @@ const BASE_EXERCISE = {
   name: '',
   sets: [
     {
-      sets: null,
       reps: null,
+      partialReps: null,
       weight: null,
       rpe: null,
+      inDropset: false,
+      id: Math.random().toString(),
     },
   ],
   dropsets: [],
   inSuperSet: false,
   id: 'werewrew',
-}
+} as Exercise
 
 export default function WorkoutForm() {
   const [data, setData] = useState<WorkoutData>({
@@ -113,10 +123,12 @@ export default function WorkoutForm() {
         name: '',
         sets: [
           {
-            sets: null,
             reps: null,
+            partialReps: null,
             weight: null,
             rpe: null,
+            inDropset: false,
+            id: Math.random().toString(),
           },
         ],
         dropsets: [],
@@ -133,19 +145,17 @@ export default function WorkoutForm() {
     }
   }
 
-  const removeExerciseFromSuperset = (exerciseId: string) => {
+  const removeExerciseFromSuperset = (
+    superset: Exercise[],
+    exerciseIndex: number
+  ) => {
     const newSupersets = [...data.supersets]
-    newSupersets.forEach((superset) => {
-      const index = superset.findIndex((exercise) => exercise.id === exerciseId)
-      if (index !== -1) {
-        superset[index].inSuperSet = false
-        superset.splice(index, 1) // remove the exercise from the superset
-        if (superset.length <= 1) {
-          superset.forEach((exercise) => (exercise.inSuperSet = false))
-          newSupersets.splice(newSupersets.indexOf(superset), 1) // remove the superset if it has less than 2 exercises
-        }
-      }
-    })
+    superset[exerciseIndex].inSuperSet = false
+    superset.splice(exerciseIndex, 1) // remove the exercise from the superset
+    if (superset.length <= 1) {
+      superset.forEach((exercise) => (exercise.inSuperSet = false))
+      newSupersets.splice(newSupersets.indexOf(superset), 1) // remove the superset if it has less than 2 exercises
+    }
     setData((prev) => ({ ...prev, supersets: newSupersets }))
   }
 
@@ -155,18 +165,53 @@ export default function WorkoutForm() {
         ...prev,
         supersets: [...prev.supersets, activeSuperSet],
       }))
-      activeSuperSet.forEach((exercise) => (exercise.inSuperSet = true))
     } else {
       const supersets = [...data.supersets]
       const index = supersets.findIndex(
         (superset) => superset === superSetToAppend
       )
       supersets[index] = [...supersets[index], ...activeSuperSet]
-      activeSuperSet.forEach((exercise) => (exercise.inSuperSet = true))
       setData((prev) => ({ ...prev, supersets }))
       setSuperSetToAppend(null)
     }
+    activeSuperSet.forEach((exercise) => (exercise.inSuperSet = true))
     setActiveSuperSet([])
+  }
+
+  const handleActiveSupersetChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    exercise: Exercise
+  ) => {
+    if (
+      (activeSuperSet.length >= 1 &&
+        activeSuperSet[activeSuperSet.length - 1].sets) ||
+      superSetToAppend
+    ) {
+      if (
+        superSetToAppend &&
+        exercise.sets.length !== superSetToAppend[0].sets.length
+      ) {
+        toast.error(
+          'All exercises in a superset must have the same number of sets.'
+        )
+        return
+      } else if (
+        activeSuperSet.length >= 1 &&
+        activeSuperSet[activeSuperSet.length - 1].sets.length !==
+          exercise.sets.length
+      ) {
+        toast.error(
+          'All exercises in a superset must have the same number of sets.'
+        )
+        return
+      }
+    }
+
+    if (e.target.checked) {
+      setActiveSuperSet((prev) => [...prev, exercise])
+    } else {
+      setActiveSuperSet((prev) => prev.filter((ex) => ex.id !== exercise.id))
+    }
   }
 
   const availableExercisesForSuperset = exercises.filter(
@@ -186,22 +231,26 @@ export default function WorkoutForm() {
   const superSetModalContent = (
     <Fragment>
       {data.supersets.length > 0 && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mb-8">
           <h3 className="text-lg">
             Current Supersets{' '}
             <span className="text-sm ml-3 text-gray-400">
               (Click to remove)
             </span>
           </h3>
-          <ul className="flex flex-col gap-4 mb-8 text-sm">
+          <ul
+            className={`flex flex-col gap-4 text-sm ${
+              superSetToAppend ? 'px-2' : 'px-0'
+            }`}
+          >
             {data.supersets.map((superset, i) => {
               return (
                 <li
                   key={i}
-                  className={`flex items-center gap-3`}
+                  className={`flex items-center gap-2`}
                 >
-                  <div
-                    className={`flex items-center gap-2 px-2 ${
+                  <ul
+                    className={`flex items-center gap-2 ${
                       superSetToAppend === superset
                         ? 'bg-violet-400/75 rounded-md'
                         : ''
@@ -210,26 +259,30 @@ export default function WorkoutForm() {
                     {'{'}
                     {superset.map((exercise, j) => {
                       return (
-                        <Button
-                          type="button"
-                          className="!w-fit !p-0 hover:underline hover:underline-offset-2"
-                          onClick={() =>
-                            removeExerciseFromSuperset(exercise.id)
-                          }
-                          key={j}
-                        >
-                          {exercise.name}
-                        </Button>
+                        <li key={j}>
+                          <Button
+                            type="button"
+                            className="!w-fit !p-0 hover:underline hover:underline-offset-2"
+                            onClick={() =>
+                              removeExerciseFromSuperset(superset, j)
+                            }
+                          >
+                            {exercise.name}
+                          </Button>
+                        </li>
                       )
                     })}
                     {'}'}
-                  </div>
+                  </ul>
 
                   <Button
                     type="button"
                     className="!p-0 !w-fit text-sm hover:underline hover:underline-offset-2"
                     onClick={() =>
                       setSuperSetToAppend(superSetToAppend ? null : superset)
+                    }
+                    hidden={
+                      superSetToAppend !== null && superSetToAppend !== superset
                     }
                   >
                     {superSetToAppend ? 'Exit' : 'Add to Superset'}
@@ -247,33 +300,27 @@ export default function WorkoutForm() {
         {exercisesToAdd ? (
           <Fragment>
             {' '}
-            <ul className="flex items-center gap-2 mb-12 pl-2">
+            <ul className="flex items-center gap-2 mb-12">
               {exercises.map((exercise, i) => {
                 if (!exercise.inSuperSet && exercise.name.length > 0)
                   return (
                     <li key={i}>
                       <input
                         type="checkbox"
-                        name={exercise.name}
-                        id={exercise.name}
+                        name={exercise.id}
+                        id={exercise.id}
                         checked={activeSuperSet.includes(exercise)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setActiveSuperSet((prev) => [...prev, exercise])
-                          } else {
-                            setActiveSuperSet((prev) =>
-                              prev.filter((ex) => ex.name !== exercise.name)
-                            )
-                          }
-                        }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleActiveSupersetChange(e, exercise)
+                        }
                         hidden
                       />
                       <label
-                        htmlFor={exercise.name}
-                        className="rounded-full py-2 px-4 text-sm bg-gray-600 transition-all cursor-pointer"
+                        htmlFor={exercise.id}
+                        className="rounded-full py-2 px-4 text-sm bg-gray-600 text-gray-200 transition-all cursor-pointer select-none"
                       >
-                        {activeSuperSet.includes(exercise) && <span></span>}{' '}
                         {exercise.name}
+                        {exercise.sets && ` (${exercise.sets.length})`}
                       </label>
                     </li>
                   )
@@ -283,16 +330,16 @@ export default function WorkoutForm() {
               type="button"
               disabled={invalidSave}
               onClick={handleSaveSuperset}
-              className="bg-green-500 rounded-md !px-8 !py-2 text-sm !w-fit ml-2"
+              className="bg-green-500 rounded-md !px-8 !py-2 text-sm !w-fit"
             >
               Save
             </Button>
           </Fragment>
         ) : (
-          <span className="text-sm pl-2">
+          <span className="text-sm text-gray-400">
             {superSetToAppend
               ? 'You need at least one available exercise add to the superset.'
-              : 'You need at least two available exercises to form a superset.'}
+              : 'You need at least two available exercises to create a new superset.'}
           </span>
         )}
       </div>

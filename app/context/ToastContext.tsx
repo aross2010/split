@@ -11,7 +11,7 @@ export default function ToastContext() {
           duration: 4000,
           style: {
             width: '100%',
-            maxWidth: '600px',
+            maxWidth: '450px',
             backgroundColor: '#374151',
             color: '#F9FAFB',
             textAlign: 'center',
