@@ -2,6 +2,7 @@
 import {
   ChangeEventHandler,
   Fragment,
+  SyntheticEvent,
   use,
   useEffect,
   useRef,
@@ -15,6 +16,8 @@ import { Exercise, Set, WorkoutData } from '../libs/types'
 import Modal from './ui/modal'
 import Button from './ui/button'
 import toast from 'react-hot-toast'
+import axios from 'axios'
+import { redirect, useRouter } from 'next/navigation'
 
 const inputs = [
   {
@@ -53,7 +56,7 @@ const BASE_EXERCISE = {
 
 export default function WorkoutForm() {
   const [data, setData] = useState<WorkoutData>({
-    name: '',
+    workoutName: '',
     location: '',
     notes: '',
     supersets: [],
@@ -67,6 +70,29 @@ export default function WorkoutForm() {
 
   const supersetBtn = useRef<HTMLButtonElement>(null)
   const exerciseRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  const router = useRouter()
+
+  const handleSubmitWorkout = async (e: any) => {
+    e.preventDefault()
+    const submitType = e.nativeEvent.submitter.value
+    const workoutData = {
+      ...data,
+      date,
+      exercises,
+    }
+    try {
+      const res = await axios.post('/api/workouts', workoutData)
+      if (submitType === 'exit') {
+        router.replace('/workouts')
+      }
+      toast.success('Workout saved successfully.')
+    } catch (e: any) {
+      console.log(e)
+      if (e.response.data.error) toast.error(e.response.data.error)
+      else toast.error('Something went wrong')
+    }
+  }
 
   const renderedInputs = inputs.map((input, i) => {
     return (
@@ -347,7 +373,10 @@ export default function WorkoutForm() {
   )
 
   return (
-    <form className="flex flex-col w-full max-w-[450px] gap-6">
+    <form
+      className="flex flex-col w-full max-w-[450px] gap-6"
+      onSubmit={handleSubmitWorkout}
+    >
       {renderedInputs}
       {renderedExerciseForms}
       <div className="grid grid-cols-2 gap-2">
@@ -387,14 +416,25 @@ export default function WorkoutForm() {
         />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <Button className="text-sm bg-gray-700 hover:bg-green-500 active:bg-green-500">
+        <Button
+          type="submit"
+          value={'save'}
+          className="text-sm bg-gray-700 hover:bg-green-500 active:bg-green-500"
+        >
           Save
         </Button>
-        <Button className="text-sm bg-gray-700 hover:bg-green-500 active:bg-green-500">
+        <Button
+          type="submit"
+          value={'exit'}
+          className="text-sm bg-gray-700 hover:bg-green-500 active:bg-green-500"
+        >
           Save & Exit
         </Button>
       </div>
-      <Button className="mr-auto !w-fit !p-0 mt-6 underline underline-offset-2 text-sm text-gray-400">
+      <Button
+        type="button"
+        className="mr-auto !w-fit !p-0 mt-6 underline underline-offset-2 text-sm text-gray-400"
+      >
         Delete Workout
       </Button>
     </form>

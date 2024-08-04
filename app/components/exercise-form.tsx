@@ -166,10 +166,9 @@ export default function ExerciseForm({
         <button
           type="button"
           onClick={() => handleAddSet(set)}
+          className={`text-green-500/75 text-sm ${i == 0 ? 'mt-8' : ''}`}
         >
-          <FaPlusCircle
-            className={`text-green-500/75 text-sm ${i == 0 ? 'mt-8' : ''}`}
-          />
+          <FaPlusCircle />
         </button>
         <div className="grid grid-cols-4 gap-2">
           {setInputs.map((input, j) => {
@@ -185,6 +184,7 @@ export default function ExerciseForm({
                   id={input.name}
                   min={0}
                   autoComplete="off"
+                  step={input.name === 'rpe' ? 0.5 : 1}
                   value={
                     String(exercises[index].sets[i][input.name as keyof Set]) ||
                     ''
@@ -199,10 +199,9 @@ export default function ExerciseForm({
         <button
           type="button"
           onClick={() => handleDeleteSet(i)}
+          className={`text-red-500/75 text-sm ${i == 0 ? 'mt-8' : ''}`}
         >
-          <FaMinusCircle
-            className={`text-red-500/75 text-sm ${i == 0 ? 'mt-8' : ''}`}
-          />
+          <FaMinusCircle />
         </button>
       </div>
     )

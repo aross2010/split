@@ -1,3 +1,4 @@
+import WorkoutsList from '@/app/components/workouts-list'
 import { getFilters } from '@/app/functions/get-filters'
 import { getSession } from '@/app/functions/get-session'
 import { getWorkouts } from '@/app/functions/get-workouts'
@@ -39,6 +40,7 @@ export default async function Workouts() {
         New Workout
       </Link>
       <h3 className="text-xl">Filter by –</h3>
+      <WorkoutsList workouts={workouts} />
     </section>
   )
 }

@@ -18,16 +18,6 @@ export type RegisterUserData = {
   password: string
 }
 
-export type Location = {
-  id: string
-  name: string
-}
-
-export type WorkoutName = {
-  id: string
-  name: string
-}
-
 export type Set = {
   reps?: number | null
   partialReps?: number | null
@@ -38,29 +28,27 @@ export type Set = {
 }
 
 export type Exercise = {
-  id: string
   name: string
   sets: Set[]
   dropsets: Set[][]
   inSuperSet: boolean
+  id: string
 }
 
 export type WorkoutData = {
-  name: string
+  workoutName: string
   location: string
   notes: string
   supersets: Exercise[][]
 }
 
-export type WorkoutInDib = {
+export type WorkoutInDb = {
   id: string
-  name: WorkoutName
+  workoutName: string
   date: Date
-  location: Location
+  location: string
   notes: string
   exercises: Exercise[]
+  supersets: Exercise[][]
+  userId: string
 }
-
-// set will have partials reps within one set
-// exercise will have dropsets with two sets in same exercise
-// exercise will haave super set with another exercise

@@ -3,7 +3,7 @@ Features to add:
 - Save and REMAIN on the edit workout page
 - Superset / dropset / partial reps options
 - Clear all filters options
-- Total Sets x Reps in the header of a workout
+- Total Sets in the header of a workout
 - Cycle through exercises for PR on dashboard (carousel, can implement with other dash options)
 - Search function inside dropdown for exercise names
 - Pin today's workout on the dashboard and workouts lists
@@ -47,3 +47,5 @@ Etc:
 - partial reps stored and displayed lightly
 - dropset -> if an exercise is in a superset, dont allow
 - else -> need at least two sets to dropset
+
+- use an overlay on home

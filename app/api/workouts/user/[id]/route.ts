@@ -1,7 +1,6 @@
-// Where all workouts for a user is found, or where a workout can be created for a user
-
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../libs/prismadb'
+import { skip } from 'node:test'
 
 export async function GET(
   req: NextRequest,
@@ -17,13 +16,11 @@ export async function GET(
       orderBy: {
         date: 'desc',
       },
+      skip: 0,
+      take: 20,
     })
   } catch (e) {
-    console.log(e)
-    return NextResponse.json(
-      { error: 'Failed to fetch workouts' },
-      { status: 500 }
-    )
+    res = []
   }
 
   prisma.$disconnect()
