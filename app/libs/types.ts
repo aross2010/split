@@ -52,3 +52,35 @@ export type WorkoutInDb = {
   supersets: Exercise[][]
   userId: string
 }
+
+export type ExercisesFormatted = {
+  name: string
+  sets: {
+    [weight: number]: {
+      sets: {
+        reps: number | undefined | null
+        rpe: number | undefined | null
+        partialReps: number | undefined | null
+        times: number
+        inDropset: boolean
+      }[]
+    }
+  }[]
+  dropsets: string[]
+  supersets: Map<string, string[]>
+  id: string
+}
+
+export type FiltersData = {
+  workout: string[]
+  location: string[]
+  exercise: string[]
+}
+
+export type Filters = {
+  workout: string | null
+  exercise: globalThis.Set<string>
+  location: string | null
+}
+
+export type FilterType = 'workout' | 'exercise' | 'location'

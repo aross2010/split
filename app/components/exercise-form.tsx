@@ -5,7 +5,7 @@ import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa'
 import Modal from './ui/modal'
 import Button from './ui/button'
 import { Set } from '../libs/types'
-import { set } from 'react-datepicker/dist/date_utils'
+import { newDate, set } from 'react-datepicker/dist/date_utils'
 
 type ExerciseFormProps = {
   exercises: Exercise[]
@@ -61,6 +61,7 @@ export default function ExerciseForm({
         newExercises[index].sets.splice(indexOfSet + 1, 0, {
           ...set,
           id: Math.random().toString(),
+          inDropset: false,
         })
       }
     } else {
@@ -141,18 +142,33 @@ export default function ExerciseForm({
   }
 
   const removeSetFromDropset = (dropset: Set[], setIndex: number) => {
-    const newDropsets = [...exercises[index].dropsets]
-    dropset[setIndex].inDropset = false
-    dropset.splice(setIndex, 1)
-    if (dropset.length <= 1) {
-      newDropsets.splice(newDropsets.indexOf(dropset), 1)
+    const newExercise = { ...exercises[index] }
+    newExercise.dropsets.forEach((dropset) => {
       dropset.forEach((set) => {
-        set.inDropset = false
+        if (set.id === dropset[setIndex].id) {
+          newExercise.sets.forEach((set) => {
+            if (set.id === dropset[setIndex].id) {
+              set.inDropset = false
+            }
+          })
+          dropset.splice(setIndex, 1)
+          if (dropset.length <= 1) {
+            newExercise.sets.forEach((set) => {
+              if (set.id === dropset[0].id) {
+                set.inDropset = false
+              }
+            })
+            newExercise.dropsets.splice(
+              newExercise.dropsets.indexOf(dropset),
+              1
+            )
+          }
+        }
       })
-    }
+    })
     setExercises((prev) => {
       const newExercises = [...prev]
-      newExercises[index].dropsets = newDropsets
+      newExercises[index] = newExercise
       return newExercises
     })
   }
@@ -257,7 +273,7 @@ export default function ExerciseForm({
                             className="!w-fit !p-0 hover:underline hover:underline-offset-2"
                             onClick={() => removeSetFromDropset(dropset, j)}
                           >
-                            Set {exercises[index].sets?.indexOf(set) + 1}
+                            Set {exercises[index].sets.length - j + 1}
                           </Button>
                         </li>
                       )
@@ -311,7 +327,6 @@ export default function ExerciseForm({
                       Set {i + 1}
                       {set.reps && ` • ${set.reps} reps`}
                       {set.weight && ` • ${set.weight} lbs`}
-                      {set.rpe && ` • RPE ${set.rpe}`}
                     </label>
                   </li>
                 )

@@ -9,7 +9,7 @@ export default async function NewWorkout() {
   if (!session) redirect('/')
 
   return (
-    <section className="flex flex-col items-center w-full max-w-[600px]">
+    <section className="flex flex-col items-center w-full max-w-[450px]">
       <h1 className="text-center text-3xl font-medium mb-12">New Workout</h1>
       <WorkoutForm />
     </section>

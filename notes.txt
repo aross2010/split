@@ -26,6 +26,7 @@ Features to add:
 - Show number of total workouts on workouts page
 - Have weight soley on home page
 - PWAs
+- add meta data
 
 Low Priority Features:
 - Tags to distinguish muscle group for an exercise (weights - 1 primary, 0.5 secondary) maybe?
@@ -43,9 +44,5 @@ Exercises Page:
 Etc: 
 - ADD a README providing steps to download into mobile and desktop apps
 
-
-- partial reps stored and displayed lightly
-- dropset -> if an exercise is in a superset, dont allow
-- else -> need at least two sets to dropset
 
 - use an overlay on home

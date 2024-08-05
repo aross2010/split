@@ -14,7 +14,7 @@ export const validateExercises = (exercises: Exercise[]): Exercise[] => {
       set.reps = parseInt(set.reps as unknown as string) || 0
       set.partialReps = parseInt(set.partialReps as unknown as string) || 0
       set.weight = parseFloat(set.weight as unknown as string) || 0
-      set.rpe = parseFloat(set.rpe as unknown as string) || 0
+      set.rpe = parseFloat(set.rpe as unknown as string) || null
     })
   })
 

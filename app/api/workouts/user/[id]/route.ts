@@ -16,8 +16,6 @@ export async function GET(
       orderBy: {
         date: 'desc',
       },
-      skip: 0,
-      take: 20,
     })
   } catch (e) {
     res = []

@@ -1,23 +1,15 @@
 'use client'
-import {
-  ChangeEventHandler,
-  Fragment,
-  SyntheticEvent,
-  use,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { Fragment, useRef, useState } from 'react'
 import TextInput from './ui/text-input'
 import ExerciseForm from './exercise-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { Exercise, Set, WorkoutData } from '../libs/types'
+import { Exercise, WorkoutData, WorkoutInDb } from '../libs/types'
 import Modal from './ui/modal'
 import Button from './ui/button'
 import toast from 'react-hot-toast'
 import axios from 'axios'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 const inputs = [
   {
@@ -54,15 +46,27 @@ const BASE_EXERCISE = {
   id: 'werewrew',
 } as Exercise
 
-export default function WorkoutForm() {
-  const [data, setData] = useState<WorkoutData>({
-    workoutName: '',
-    location: '',
-    notes: '',
-    supersets: [],
-  })
-  const [date, setDate] = useState<Date | null>(new Date())
-  const [exercises, setExercises] = useState<Exercise[]>([BASE_EXERCISE])
+type WorkoutFormProps = {
+  workout?: WorkoutInDb
+}
+
+export default function WorkoutForm({ workout }: WorkoutFormProps) {
+  const [data, setData] = useState<WorkoutData | WorkoutInDb>(
+    workout
+      ? workout
+      : {
+          workoutName: '',
+          location: '',
+          notes: '',
+          supersets: [],
+        }
+  )
+  const [date, setDate] = useState<Date | null>(
+    workout ? workout.date : new Date()
+  )
+  const [exercises, setExercises] = useState<Exercise[]>(
+    workout ? workout.exercises : [BASE_EXERCISE]
+  )
   const [activeSuperSet, setActiveSuperSet] = useState<Exercise[]>([])
   const [superSetToAppend, setSuperSetToAppend] = useState<Exercise[] | null>(
     null
@@ -82,15 +86,34 @@ export default function WorkoutForm() {
       exercises,
     }
     try {
-      const res = await axios.post('/api/workouts', workoutData)
-      if (submitType === 'exit') {
-        router.replace('/workouts')
+      if (!workout) {
+        const res = await axios.post('/api/workouts', workoutData)
+        if (submitType === 'exit') {
+          router.replace('/workouts')
+        }
+        toast.success('Workout saved successfully.')
+      } else {
+        const res = await axios.put(`/api/workouts/${workout.id}`, workoutData)
+        if (submitType === 'exit') {
+          router.replace('/workouts')
+        }
+        toast.success('Workout updated successfully.')
       }
-      toast.success('Workout saved successfully.')
     } catch (e: any) {
-      console.log(e)
       if (e.response.data.error) toast.error(e.response.data.error)
-      else toast.error('Something went wrong')
+      else toast.error('Something went wrong.')
+    }
+  }
+
+  const handleDeleteWorkout = async () => {
+    if (!workout) return
+    try {
+      await axios.delete(`/api/workouts/${workout.id}`)
+      router.replace('/workouts')
+      toast.success('Workout deleted successfully.')
+    } catch (e: any) {
+      if (e.response.data.error) toast.error(e.response.data.error)
+      else toast.error('Something went wrong.')
     }
   }
 
@@ -176,13 +199,25 @@ export default function WorkoutForm() {
     exerciseIndex: number
   ) => {
     const newSupersets = [...data.supersets]
-    superset[exerciseIndex].inSuperSet = false
-    superset.splice(exerciseIndex, 1) // remove the exercise from the superset
-    if (superset.length <= 1) {
-      superset.forEach((exercise) => (exercise.inSuperSet = false))
-      newSupersets.splice(newSupersets.indexOf(superset), 1) // remove the superset if it has less than 2 exercises
-    }
+    const newExercises = [...exercises]
+    newSupersets.forEach((superset, i) => {
+      superset.forEach((exercise, j) => {
+        if (exercise.id === superset[exerciseIndex].id) {
+          exercises.forEach((ex) => {
+            if (ex.id === exercise.id) {
+              ex.inSuperSet = false
+            }
+          })
+        }
+      })
+      superset.splice(exerciseIndex, 1)
+      if (superset.length <= 1) {
+        newExercises.forEach((exercise) => (exercise.inSuperSet = false))
+        newSupersets.splice(newSupersets.indexOf(superset), 1)
+      }
+    })
     setData((prev) => ({ ...prev, supersets: newSupersets }))
+    setExercises(newExercises)
   }
 
   const handleSaveSuperset = () => {
@@ -265,7 +300,7 @@ export default function WorkoutForm() {
             </span>
           </h3>
           <ul
-            className={`flex flex-col gap-4 text-sm ${
+            className={`flex flex-col gap-4 text-sm flex-wrap ${
               superSetToAppend ? 'px-2' : 'px-0'
             }`}
           >
@@ -326,7 +361,7 @@ export default function WorkoutForm() {
         {exercisesToAdd ? (
           <Fragment>
             {' '}
-            <ul className="flex items-center gap-2 mb-12">
+            <ul className="flex items-center gap-4 mb-12 flex-wrap">
               {exercises.map((exercise, i) => {
                 if (!exercise.inSuperSet && exercise.name.length > 0)
                   return (
@@ -374,7 +409,7 @@ export default function WorkoutForm() {
 
   return (
     <form
-      className="flex flex-col w-full max-w-[450px] gap-6"
+      className="flex flex-col w-full gap-6"
       onSubmit={handleSubmitWorkout}
     >
       {renderedInputs}
@@ -433,6 +468,7 @@ export default function WorkoutForm() {
       </div>
       <Button
         type="button"
+        onClick={handleDeleteWorkout}
         className="mr-auto !w-fit !p-0 mt-6 underline underline-offset-2 text-sm text-gray-400"
       >
         Delete Workout
