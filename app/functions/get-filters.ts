@@ -19,3 +19,13 @@ export const getFilters = (workouts: WorkoutInDb[]) => {
     exercise: Array.from(exerciseName),
   }
 }
+
+export const getExerciseNames = (workouts: WorkoutInDb[]) => {
+  const names = new Set()
+  workouts.forEach((workout) => {
+    workout.exercises.forEach((exercise) => {
+      names.add(exercise.name)
+    })
+  })
+  return Array.from(names)
+}

@@ -21,6 +21,8 @@ export default async function Navbar() {
   const renderedLinks = links.map((link) => {
     return (
       <Link
+        key={link.href}
+        replace
         className="hover:text-violet-400 transition-colors font-medium"
         href={link.href}
       >

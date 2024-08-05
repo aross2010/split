@@ -1,5 +1,23 @@
+import { getExerciseNames } from '@/app/functions/get-filters'
+import { getSession } from '@/app/functions/get-session'
+import { getWorkouts } from '@/app/functions/get-workouts'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
-export default function Exercises() {
-  return <div>Exercises</div>
+export default async function Exercises() {
+  const session = await getSession()
+
+  if (!session) redirect('/')
+
+  const workouts = await getWorkouts(session.user.id)
+  const exercises = getExerciseNames(workouts)
+
+  return (
+    <section className="flex flex-col items-center w-full max-w-[600px]">
+      <h1 className="text-center text-3xl font-medium mb-4">Your Exercises</h1>
+      <h3 className="text-gray-200 text-lg">
+        Search for an exercise to view your progress
+      </h3>
+    </section>
+  )
 }

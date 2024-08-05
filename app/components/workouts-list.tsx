@@ -1,6 +1,6 @@
 'use client'
 import { RxCaretDown } from 'react-icons/rx'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FiltersData, WorkoutInDb, Filters } from '../libs/types'
 import Workout from './ui/workout'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -8,6 +8,7 @@ import Dropdown from './ui/dropdown'
 import DropdownList from './ui/dropdown-list'
 import { FilterType } from '../libs/types'
 import { IoIosCloseCircle } from 'react-icons/io'
+import { filterWorkouts } from '../functions/filter-workouts'
 
 type WorkoutsProps = {
   workouts: WorkoutInDb[]
@@ -30,23 +31,51 @@ const filterOptions = [
 ] as const
 
 export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
-  const searchParams = useSearchParams()
   const [filters, setFilters] = useState<Filters>({
     workout: null,
     exercise: new Set<string>(),
     location: null,
   })
-  const [paramString, setParamString] = useState('')
-  const [workoutsToDisplay, setWorkoutsToDisplay] = useState(workouts)
+  const [workoutsToDisplay, setWorkoutsToDisplay] =
+    useState<WorkoutInDb[]>(workouts)
   const [activeFilterType, setActiveFilterType] = useState<FilterType | null>(
     null
   )
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
-    Object.entries(filters).forEach(([key, value]) => {})
+    const exercise = searchParams.get('exercise')
+    const location = searchParams.get('location')
+    const workout = searchParams.get('workout')
+    const newFilters = { ...filters }
+    if (exercise) {
+      newFilters.exercise = new Set(exercise.split(','))
+    }
+    if (location) {
+      newFilters.location = location
+    }
+    if (workout) {
+      newFilters.workout = workout
+    }
+    setFilters(newFilters)
+  }, [searchParams])
 
-    router.push(searchParams.toString())
+  useEffect(() => {
+    console.log('filter chanfed')
+    const params = new URLSearchParams()
+    Object.entries(filters).forEach(([filterType, filterValue]) => {
+      if (filterType === 'exercise' && (filterValue as Set<string>).size >= 1) {
+        params.append(
+          filterType,
+          Array.from(filterValue as Set<string>).join(',')
+        )
+      } else if (filterValue && filterType !== 'exercise') {
+        params.append(filterType, filterValue as string)
+      }
+    })
+    router.push(`/workouts?${params.toString()}`)
+    setWorkoutsToDisplay(filterWorkouts(filters, workouts))
   }, [filters])
 
   const workoutButtonRef = useRef<HTMLButtonElement>(null)
@@ -132,9 +161,9 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
     )
   })
 
-  const renderedWorkouts = workoutsToDisplay.map((workout) => {
+  const renderedWorkouts = workoutsToDisplay.map((workout, i) => {
     return (
-      <li key={workout.id}>
+      <li key={i}>
         <Workout workout={workout} />
       </li>
     )
@@ -191,6 +220,11 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
           {renderedDisplayedFilters}
         </div>
       </div>
+      {workoutsToDisplay.length === 0 && (
+        <p className="text-center mt-6">
+          No workouts found with the selected filters.
+        </p>
+      )}
       <ul className="flex flex-col gap-6">{renderedWorkouts}</ul>
     </div>
   )
