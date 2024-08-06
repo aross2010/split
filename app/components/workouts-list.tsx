@@ -62,7 +62,6 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
   }, [searchParams])
 
   useEffect(() => {
-    console.log('filter chanfed')
     const params = new URLSearchParams()
     Object.entries(filters).forEach(([filterType, filterValue]) => {
       if (filterType === 'exercise' && (filterValue as Set<string>).size >= 1) {
@@ -137,7 +136,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
         </button>
 
         <Dropdown
-          openButton={
+          opener={
             i === 0
               ? workoutButtonRef
               : i === 1

@@ -1,3 +1,4 @@
+import ExerciseStats from '@/app/components/exercises-stats'
 import { getExerciseNames } from '@/app/functions/get-filters'
 import { getSession } from '@/app/functions/get-session'
 import { getWorkouts } from '@/app/functions/get-workouts'
@@ -10,7 +11,7 @@ export default async function Exercises() {
   if (!session) redirect('/')
 
   const workouts = await getWorkouts(session.user.id)
-  const exercises = getExerciseNames(workouts)
+  const exerciseNames = getExerciseNames(workouts) as string[]
 
   return (
     <section className="flex flex-col items-center w-full max-w-[600px]">
@@ -18,6 +19,10 @@ export default async function Exercises() {
       <h3 className="text-gray-200 text-lg">
         Search for an exercise to view your progress
       </h3>
+      <ExerciseStats
+        exerciseNames={exerciseNames}
+        workouts={workouts}
+      />
     </section>
   )
 }

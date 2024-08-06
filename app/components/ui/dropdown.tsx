@@ -4,19 +4,22 @@ import { useState, useEffect, useRef } from 'react'
 
 type DropdownProps = {
   children: React.ReactNode
-  openButton: React.RefObject<HTMLButtonElement>
+  opener: React.RefObject<HTMLButtonElement> | boolean
   onOpen?: () => void
   onClose?: () => void
 }
 
 export default function Dropdown({
   children,
-  openButton,
+  opener,
   onOpen,
   onClose,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+
+  const isOpenedByButton =
+    opener && typeof opener === 'object' && 'current' in opener
 
   useEffect(() => {
     if (isOpen && onOpen) onOpen()
@@ -27,7 +30,12 @@ export default function Dropdown({
     const closeDropdown = (e: MouseEvent) => {
       if (isOpen && ref.current && !ref.current.contains(e.target as Node))
         setIsOpen(false)
-      if (openButton.current && openButton.current.contains(e.target as Node)) {
+
+      if (
+        isOpenedByButton &&
+        opener.current &&
+        opener.current.contains(e.target as Node)
+      ) {
         setIsOpen(!isOpen)
       }
     }
@@ -42,8 +50,10 @@ export default function Dropdown({
   return (
     <div
       ref={ref}
-      hidden={!isOpen}
-      className={`absolute z-10 border border-gray-500 shadow-xl w-full rounded-md py-3 right-0 top-full mt-0.5 bg-gray-700 overflow-y-auto max-h-[30rem]`}
+      hidden={isOpenedByButton ? !isOpen : !opener}
+      className={`absolute z-10 border border-gray-500 shadow-xl w-full rounded-md py-3 right-0 top-full dropdown-container ${
+        isOpenedByButton ? 'mt-0.5' : 'mt-1.5'
+      } bg-gray-700 overflow-y-auto max-h-[30rem]`}
     >
       {children}
     </div>

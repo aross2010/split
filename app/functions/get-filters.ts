@@ -14,9 +14,9 @@ export const getFilters = (workouts: WorkoutInDb[]) => {
   })
 
   return {
-    workout: Array.from(workoutNames),
-    location: Array.from(locations),
-    exercise: Array.from(exerciseName),
+    workout: Array.from(workoutNames).sort(),
+    location: Array.from(locations).sort(),
+    exercise: Array.from(exerciseName).sort(),
   }
 }
 
@@ -27,5 +27,5 @@ export const getExerciseNames = (workouts: WorkoutInDb[]) => {
       names.add(exercise.name)
     })
   })
-  return Array.from(names)
+  return Array.from(names).sort()
 }
