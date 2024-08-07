@@ -84,3 +84,21 @@ export type Filters = {
 }
 
 export type FilterType = 'workout' | 'exercise' | 'location'
+
+export type ExerciseStatsType = {
+  name: string
+  totalWorkouts: number
+  totalSets: number
+  totalReps: number
+  totalLocations: number
+  PR: number
+  PL: number
+  topSets: {
+    date: Date
+    location: string
+    rpe: number | null
+    reps: number | null
+    weight: number
+    workoutId: string
+  }[]
+}

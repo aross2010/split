@@ -1,20 +1,35 @@
 import React from 'react'
 import { useFormStatus } from 'react-dom'
+import Button from './button'
+import { TailSpin } from 'react-loader-spinner'
+
+type SubmitButtonProps = {
+  children: React.ReactNode
+  className?: string
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 export default function SubmitButton({
   children,
-}: {
-  children: React.ReactNode
-}) {
+  className,
+  ...rest
+}: SubmitButtonProps) {
   const { pending } = useFormStatus()
 
   return (
-    <button
+    <Button
       type="submit"
-      className="bg-violet-400 text-white rounded-md p-3 hover:brightness-110 transition-all disabled:bg-opacity-70 disabled:cursor-not-allowed"
+      className={`disabled:bg-opacity-70 disabled:cursor-not-allowed flex items-center gap-2 ${className}`}
       disabled={pending}
+      {...rest}
     >
       {children}
-    </button>
+      {pending && (
+        <TailSpin
+          color="#ffffff"
+          height={20}
+          width={20}
+        />
+      )}
+    </Button>
   )
 }

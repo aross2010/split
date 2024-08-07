@@ -43,21 +43,25 @@ export default function SignIn({ setIsSignIn, isSignIn }: SignInProps) {
         }}
       >
         {signInInputs.map((input, i) => {
+          const { label, type, name } = input
           return (
             <div
               key={i}
               className="flex flex-col gap-2"
             >
-              <label htmlFor={input.name}>{input.label}</label>
+              <label htmlFor={name}>{label}</label>
               <TextInput
-                type={input.type}
-                name={input.name}
-                id={input.name}
+                type={type}
+                name={name}
+                id={name}
+                className="!bg-gray-600"
               />
             </div>
           )
         })}
-        <SubmitButton>Sign in</SubmitButton>
+        <SubmitButton className="flex justify-center bg-violet-400">
+          Sign in
+        </SubmitButton>
       </form>
       <span className="block mb-4">
         Don't have an account?{' '}

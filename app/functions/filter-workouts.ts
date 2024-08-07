@@ -5,6 +5,7 @@ export const filterWorkouts = (
   workouts: WorkoutInDb[]
 ): WorkoutInDb[] => {
   return workouts.filter((workout) => {
+    console.log(filters)
     if (filters.workout && workout.workoutName !== filters.workout) {
       return false
     }

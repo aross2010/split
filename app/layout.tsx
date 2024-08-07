@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.className} w-full flex flex-col items-center min-h-[120vh] bg-gray-950 text-gray-50 px-3 scroll-smooth`}
+        className={`${outfit.className} w-full flex flex-col items-center min-h-[120vh] bg-gray-950 overflow-x-hidden text-gray-50 px-3 scroll-smooth`}
       >
         <AuthProvider>
           <ToastContext />

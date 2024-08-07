@@ -6,9 +6,11 @@ import Modal from './ui/modal'
 import Button from './ui/button'
 import { Set } from '../libs/types'
 import { newDate, set } from 'react-datepicker/dist/date_utils'
+import SearchInput from './ui/search-input'
 
 type ExerciseFormProps = {
   exercises: Exercise[]
+  exerciseNames: string[]
   setExercises: React.Dispatch<React.SetStateAction<Exercise[]>>
   index: number
 }
@@ -38,6 +40,7 @@ const setInputs = [
 
 export default function ExerciseForm({
   exercises,
+  exerciseNames,
   setExercises,
   index,
 }: ExerciseFormProps) {
@@ -83,14 +86,6 @@ export default function ExerciseForm({
     const newExercises = [...exercises]
     newExercises[index].sets?.splice(i, 1)
     setExercises(newExercises)
-  }
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExercises((prev) => {
-      const newExercises = [...prev]
-      newExercises[index].name = e.target.value
-      return newExercises
-    })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, i: number) => {
@@ -273,7 +268,10 @@ export default function ExerciseForm({
                             className="!w-fit !p-0 hover:underline hover:underline-offset-2"
                             onClick={() => removeSetFromDropset(dropset, j)}
                           >
-                            Set {exercises[index].sets.length - j + 1}
+                            Set{' '}
+                            {exercises[index].sets.findIndex(
+                              (s) => s.id === set.id
+                            ) + 1}
                           </Button>
                         </li>
                       )
@@ -355,12 +353,27 @@ export default function ExerciseForm({
       <div hidden={!isOpen}>
         <div className="flex flex-col gap-2 mb-6">
           <label htmlFor="exerciseName">Exercise Name</label>
-          <TextInput
+          <SearchInput
             type="text"
             name="exerciseName"
             id="exerciseName"
-            onChange={handleNameChange}
+            onChange={(e) => {
+              setExercises((prev) => {
+                const newExercises = [...prev]
+                newExercises[index].name = e.target.value
+                return newExercises
+              })
+            }}
             value={exercises[index].name}
+            input={exercises[index].name}
+            onClick={(item) => {
+              setExercises((prev) => {
+                const newExercises = [...prev]
+                newExercises[index].name = item as string
+                return newExercises
+              })
+            }}
+            items={exerciseNames}
           />
         </div>
         <div className="mb-12 flex flex-col gap-2">{renderedSetInputs}</div>

@@ -56,7 +56,7 @@ export default function DropdownList({
               onMouseDown={() => {
                 onClick(item)
               }}
-              className={`p-2 hover:bg-violet-300 select-none z-10 cursor-pointer !flex justify-between items-center w-full text-left transition-colors ${
+              className={`p-2 hover:bg-violet-300 select-none cursor-pointer !flex justify-between items-center w-full text-left transition-colors ${
                 selectedIndex === index ? 'bg-violet-400' : ''
               }`}
             >

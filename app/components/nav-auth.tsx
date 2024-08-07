@@ -5,11 +5,14 @@ import { Session } from '../libs/types'
 import SignUp from './sign-up'
 import SignIn from './sign-in'
 import { signOut } from 'next-auth/react'
+import useWindowSizeHook from '../hooks/window-size'
 
 export default function NavAuth({ session }: { session: Session | null }) {
   const [isSignIn, setIsSignIn] = useState(true)
   const ref = useRef<HTMLButtonElement>(null)
   const ref2 = useRef<HTMLButtonElement>(null)
+
+  const screenWidth = useWindowSizeHook()
 
   return (
     <div>
@@ -45,7 +48,10 @@ export default function NavAuth({ session }: { session: Session | null }) {
         </div>
       </Modal>
 
-      <Modal button={ref}>
+      <Modal
+        button={ref}
+        fullScreen={screenWidth < 550}
+      >
         <SignIn
           setIsSignIn={setIsSignIn}
           isSignIn={isSignIn}

@@ -1,76 +1,99 @@
 'use client'
 
-import { WorkoutInDb } from '../libs/types'
-import { useState, useRef, useEffect } from 'react'
+import { ExerciseStatsType, WorkoutInDb } from '../libs/types'
+import { useState, useEffect, useRef, Fragment } from 'react'
 import Dropdown from './ui/dropdown'
 import DropdownList from './ui/dropdown-list'
 import TextInput from './ui/text-input'
-import { set } from 'react-datepicker/dist/date_utils'
-import { text } from 'stream/consumers'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Button from './ui/button'
+import { getExerciseStats } from '../functions/get-exercises-stats'
+import { BiCalendarCheck } from 'react-icons/bi'
+import { RiBracesFill } from 'react-icons/ri'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts'
+import {
+  FaLocationDot,
+  FaArrowTrendDown,
+  FaArrowTrendUp,
+  FaRepeat,
+} from 'react-icons/fa6'
+import IconCard from './ui/icon-card'
+import Modal from './ui/modal'
+import SubmitButton from './ui/submit-btn'
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { set } from 'react-datepicker/dist/date_utils'
+import SearchInput from './ui/search-input'
 
 type ExerciseStatsProps = {
   exerciseNames: string[]
   workouts: WorkoutInDb[]
 }
 
+const facts = [
+  {
+    title: 'Workouts',
+    value: 'totalWorkouts',
+    icon: <BiCalendarCheck />,
+  },
+  {
+    title: 'Sets',
+    value: 'totalSets',
+    icon: <RiBracesFill />,
+  },
+  {
+    title: 'Reps',
+    value: 'totalReps',
+    icon: <FaRepeat />,
+  },
+  {
+    title: 'Locations',
+    value: 'totalLocations',
+    icon: <FaLocationDot />,
+  },
+  {
+    title: 'PL',
+    value: 'PL',
+    icon: <FaArrowTrendDown />,
+  },
+  {
+    title: 'PR',
+    value: 'PR',
+    icon: <FaArrowTrendUp />,
+  },
+] as const
+
 export default function ExerciseStats({
   exerciseNames,
   workouts,
 }: ExerciseStatsProps) {
-  const [textResults, setTextResults] = useState<string[]>([])
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
   const [search, setSearch] = useState('')
-  const [selectedExercise, setSelectedExercise] = useState<string | null>(null)
+  const [selectedExercise, setSelectedExercise] =
+    useState<ExerciseStatsType | null>(null)
+  const [chartData, setChartData] = useState(null)
 
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  useEffect(() => {
-    setSelectedIndex(0)
-  }, [textResults])
+  const editButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const exercise = searchParams.get('name')
-    if (exercise && exercise !== selectedExercise) setSelectedExercise(exercise)
+    if (exercise && exercise !== selectedExercise?.name)
+      setSelectedExercise(getExerciseStats(exercise, workouts))
   }, [searchParams])
 
-  const handleSearch = (input: string) => {
-    if (input.length === 0) setDropdownOpen(false)
-    setSearch(input)
-    const results = exerciseNames.filter((name) =>
-      name.toLowerCase().includes(input.toLowerCase())
-    )
-    setTextResults(results)
-    if (results.length > 0 && input.length > 0) setDropdownOpen(true)
-    else setDropdownOpen(false)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (textResults.length === 0) return
-
-    const prevIndex = selectedIndex
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setSelectedIndex((prevIndex + 1) % textResults.length)
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setSelectedIndex(
-        (prevIndex - 1 + textResults.length) % textResults.length
-      )
-    } else if (e.key === 'Enter') {
-      handleSelectExercise(textResults[selectedIndex])
-    } else if (e.key === 'Escape') {
-      setDropdownOpen(false)
-      setTextResults([])
-    }
-  }
-
   const handleSelectExercise = (exercise: string) => {
-    setSelectedExercise(exercise)
-    setDropdownOpen(false)
-    setTextResults([])
+    setSelectedExercise(getExerciseStats(exercise, workouts))
     const textInputElement = document.querySelector(
       '.exercise-search'
     ) as HTMLInputElement
@@ -79,38 +102,98 @@ export default function ExerciseStats({
     router.push(`/exercises?name=${exercise}`)
   }
 
+  const handleChangeName = async (formData: FormData) => {
+    if (!selectedExercise) return
+    const newExerciseName = formData.get('newExerciseName')
+    if (typeof newExerciseName === 'string' && newExerciseName.length < 1) {
+      toast.error('Exercise name must be at least one character.')
+      return
+    }
+    try {
+      await axios.put(`/api/exercises`, {
+        oldExerciseName: selectedExercise.name,
+        newExerciseName,
+      })
+      toast.success(`Successfully changed name to ${newExerciseName}!`)
+      const modalButtonClose = document.querySelector(
+        '.modal-button-close'
+      ) as HTMLButtonElement
+      if (modalButtonClose) {
+        modalButtonClose.click()
+      }
+      router.push(`/exercises?name=${newExerciseName}`)
+    } catch (e: any) {
+      if (e.response.data.error) toast.error(e.response.data.error)
+      else toast.error('Something went wrong.')
+    }
+  }
+
+  const editNameModal = selectedExercise && (
+    <Fragment>
+      <h3 className="font-medium mb-6">Change {selectedExercise.name} to...</h3>
+      <form action={handleChangeName}>
+        <TextInput
+          type="text"
+          placeholder="New Name"
+          name="newExerciseName"
+          className="w-full !bg-gray-600"
+        />
+        <SubmitButton className="mt-4 text-sm !w-fit !px-4 !py-2 bg-violet-400">
+          Change Name
+        </SubmitButton>
+      </form>
+    </Fragment>
+  )
+
+  const renderedFacts =
+    selectedExercise &&
+    facts.map((fact) => {
+      const { value, title, icon } = fact
+      return (
+        <IconCard
+          key={title}
+          title={title}
+          icon={icon}
+          value={selectedExercise[value]}
+          link={
+            value === 'totalWorkouts'
+              ? `/workouts?name=${selectedExercise.name}`
+              : undefined
+          }
+        />
+      )
+    })
+
   return (
     <div className="mt-12 w-full flex flex-col items-center">
       <div className="w-full max-w-[400px] relative">
-        <TextInput
+        <SearchInput
           className="exercise-search"
-          onFocus={(e) => {
-            if (textResults.length > 0 && e.target.value.length > 0)
-              setDropdownOpen(true)
-          }}
-          onBlur={() => {
-            setSearch('')
-            setDropdownOpen(false)
-          }}
           type="text"
           value={search}
+          input={search}
           onChange={(e) => {
-            handleSearch(e.target.value)
+            setSearch(e.target.value)
           }}
-          onKeyDown={handleKeyDown}
+          onClick={(item) => handleSelectExercise(item as string)}
+          items={exerciseNames}
           placeholder="Search for an exercise..."
         />
-        <Dropdown opener={dropdownOpen}>
-          <DropdownList
-            list={textResults}
-            onClick={handleSelectExercise}
-            selectedIndex={selectedIndex}
-          />
-        </Dropdown>
       </div>
       {selectedExercise && (
-        <div className="mt-12 w-full max-w-[600px] rounded-md p-3 bg-gray-700">
-          {selectedExercise}
+        <div className="mt-12 w-full max-w-[700px] rounded-md p-4 bg-gray-700">
+          <h3 className="font-medium text-lg">{selectedExercise.name}</h3>
+          <Button
+            ref={editButtonRef}
+            type="button"
+            className="!w-fit !p-0 underline underline-offset-2 text-gray-400 text-sm"
+          >
+            Edit Name
+          </Button>
+          <Modal button={editButtonRef}>{editNameModal}</Modal>
+          <div className="grid sm:grid-cols-3 grid-cols-2 sm:gap-3 gap-2 w-full mt-6">
+            {renderedFacts}
+          </div>
         </div>
       )}
     </div>

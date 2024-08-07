@@ -1,6 +1,6 @@
 'use client'
 import { RxCaretDown } from 'react-icons/rx'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FiltersData, WorkoutInDb, Filters } from '../libs/types'
 import Workout from './ui/workout'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -9,6 +9,10 @@ import DropdownList from './ui/dropdown-list'
 import { FilterType } from '../libs/types'
 import { IoIosCloseCircle } from 'react-icons/io'
 import { filterWorkouts } from '../functions/filter-workouts'
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa6'
+import Button from './ui/button'
+import Link from 'next/link'
+import { set } from 'react-datepicker/dist/date_utils'
 
 type WorkoutsProps = {
   workouts: WorkoutInDb[]
@@ -41,8 +45,15 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
   const [activeFilterType, setActiveFilterType] = useState<FilterType | null>(
     null
   )
+  const [isSortDesc, setIsSortDesc] = useState(true)
+  const [maxDisplayedWorkouts, setMaxDisplayedWorkouts] = useState(25)
+
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  useEffect(() => {
+    setWorkoutsToDisplay(filterWorkouts(filters, workouts))
+  }, [filters])
 
   useEffect(() => {
     const exercise = searchParams.get('exercise')
@@ -62,6 +73,16 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
   }, [searchParams])
 
   useEffect(() => {
+    const workoutsCopy = [...workoutsToDisplay]
+    workoutsCopy.sort((a, b) => {
+      if (isSortDesc)
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      else return new Date(a.date).getTime() - new Date(b.date).getTime()
+    })
+    setWorkoutsToDisplay(workoutsCopy)
+  }, [isSortDesc])
+
+  const setURLParams = (filters: Filters) => {
     const params = new URLSearchParams()
     Object.entries(filters).forEach(([filterType, filterValue]) => {
       if (filterType === 'exercise' && (filterValue as Set<string>).size >= 1) {
@@ -75,7 +96,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
     })
     router.push(`/workouts?${params.toString()}`)
     setWorkoutsToDisplay(filterWorkouts(filters, workouts))
-  }, [filters])
+  }
 
   const workoutButtonRef = useRef<HTMLButtonElement>(null)
   const exerciseButtonRef = useRef<HTMLButtonElement>(null)
@@ -92,6 +113,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
       } else {
         newFilters.exercise.add(filter)
       }
+      setURLParams(newFilters)
       setFilters(newFilters)
     }
     if (activeFilterType === 'workout') {
@@ -128,7 +150,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
           type="button"
           value={value}
           key={name}
-          className={`flex items-center gap-2 p-2 hover:bg-violet-400 transition-all ${
+          className={`flex items-center gap-1 p-2 hover:bg-violet-400 transition-all ${
             i == 0 ? 'rounded-l-md' : i == 2 ? 'rounded-r-md' : ''
           } ${activeFilterType == value ? 'bg-violet-400' : ''} `}
         >
@@ -161,6 +183,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
   })
 
   const renderedWorkouts = workoutsToDisplay.map((workout, i) => {
+    if (i >= maxDisplayedWorkouts) return
     return (
       <li key={i}>
         <Workout workout={workout} />
@@ -208,15 +231,44 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
     }
   )
 
+  const numOfFilters = Object.values(filters).reduce((acc, filter) => {
+    if (filter) {
+      if (typeof filter === 'string') return acc + 1
+      return acc + (filter as Set<string>).size
+    }
+    return acc
+  }, 0)
+
   return (
     <div className="w-full max-w-[550px]">
       <div className="flex flex-col items-center">
-        <h3 className="text-xl mb-4">Filter by </h3>
+        <h3 className="text-xl mb-2">Filter by </h3>
+
         <div className="mb-6 relative bg-gray-700 rounded-md grid grid-cols-3 gap-0">
           {renderedFilters}
         </div>
         <div className="mb-6 flex items-center flex-wrap gap-2 justify-center transition-all">
           {renderedDisplayedFilters}
+          {numOfFilters >= 2 && (
+            <button
+              onClick={() => {
+                setFilters({
+                  workout: null,
+                  exercise: new Set(),
+                  location: null,
+                })
+                setURLParams({
+                  workout: null,
+                  exercise: new Set(),
+                  location: null,
+                })
+              }}
+              type="button"
+              className="bg-gray-700 py-1 px-3 flex items-center gap-2 rounded-full text-gray-400 hover:bg-red-500 hover:text-gray-50 transition-all"
+            >
+              Clear all
+            </button>
+          )}
         </div>
       </div>
       {workoutsToDisplay.length === 0 && (
@@ -224,7 +276,44 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
           No workouts found with the selected filters.
         </p>
       )}
+      {workoutsToDisplay.length > 0 && (
+        <div className="px-2 mb-0.5 flex items-center justify-between text-gray-200">
+          <div className="flex items-center gap-2">
+            <span>Sort by:</span>
+            <button
+              type="button"
+              onClick={() => setIsSortDesc(!isSortDesc)}
+              className=" group flex font-medium items-center gap-1"
+            >
+              <span className="group-hover:text-violet-400 transition-all">
+                Date
+              </span>
+              <FaArrowDown
+                className={`transition-all text-gray-400 text-sm group-hover:text-violet-400 ${
+                  !isSortDesc ? '-rotate-180' : ''
+                }`}
+              />
+            </button>
+          </div>
+          <span>
+            {workoutsToDisplay.length}{' '}
+            {workoutsToDisplay.length == 1 ? 'Workout' : 'Workouts'}
+          </span>
+        </div>
+      )}
+
       <ul className="flex flex-col gap-6">{renderedWorkouts}</ul>
+      {maxDisplayedWorkouts < workoutsToDisplay.length && (
+        <div className="flex justify-center mt-8">
+          <Button
+            type="button"
+            onClick={() => setMaxDisplayedWorkouts((prev) => prev + 25)}
+            className="mt-4 text-sm !w-fit flex items-center gap-1 !px-4 !py-2 bg-gray-600"
+          >
+            Load More <FaArrowDown className="text-sm text-gray-200" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

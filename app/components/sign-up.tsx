@@ -56,16 +56,18 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
   }
 
   const renderedInputs = signUpInputs.map((input, i) => {
+    const { name, label, type } = input
     return (
       <div
         key={i}
         className="flex flex-col gap-2"
       >
-        <label htmlFor={input.name}>{input.label}</label>
+        <label htmlFor={name}>{label}</label>
         <TextInput
-          type={input.type}
-          name={input.name}
-          id={input.name}
+          type={type}
+          name={name}
+          id={name}
+          className="!bg-gray-600"
         />
       </div>
     )
@@ -82,7 +84,9 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
         action={registerUser}
       >
         {renderedInputs}
-        <SubmitButton>Sign up</SubmitButton>
+        <SubmitButton className="flex justify-center bg-violet-400">
+          Sign up
+        </SubmitButton>
       </form>
       <span className="block mb-4">
         Already have an account?{' '}

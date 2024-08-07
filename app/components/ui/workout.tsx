@@ -75,7 +75,7 @@ export default function Workout({ workout }: WorkoutProps) {
                     return Object.entries(set).map(([weight, { sets }], i) => {
                       return (
                         <li key={i}>
-                          <ul className="flex justify-between items-center">
+                          <ul className="flex justify-between items-center flex-wrap">
                             <div className="flex items-center gap-2">
                               {sets.map((set, i) => {
                                 return (
@@ -83,7 +83,7 @@ export default function Workout({ workout }: WorkoutProps) {
                                     <li
                                       className={`flex items-center gap-1 py-0.5 px-2 ${
                                         set.inDropset
-                                          ? 'bg-gray-600 outline outline-gray-400'
+                                          ? 'bg-gray-600 outline outline-gray-800'
                                           : 'bg-gray-600'
                                       } rounded-md select-none`}
                                     >

@@ -4,12 +4,17 @@ import TextInput from './ui/text-input'
 import ExerciseForm from './exercise-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { Exercise, WorkoutData, WorkoutInDb } from '../libs/types'
+import { Exercise, FiltersData, WorkoutData, WorkoutInDb } from '../libs/types'
 import Modal from './ui/modal'
 import Button from './ui/button'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import SubmitButton from './ui/submit-btn'
+import Dropdown from './ui/dropdown'
+import DropdownList from './ui/dropdown-list'
+import SearchInput from './ui/search-input'
+import { set } from 'react-datepicker/dist/date_utils'
 
 const inputs = [
   {
@@ -27,7 +32,7 @@ const inputs = [
     type: 'text',
     name: 'location',
   },
-]
+] as const
 
 const BASE_EXERCISE = {
   name: '',
@@ -48,9 +53,13 @@ const BASE_EXERCISE = {
 
 type WorkoutFormProps = {
   workout?: WorkoutInDb
+  uniqueHistory: FiltersData
 }
 
-export default function WorkoutForm({ workout }: WorkoutFormProps) {
+export default function WorkoutForm({
+  workout,
+  uniqueHistory,
+}: WorkoutFormProps) {
   const [data, setData] = useState<WorkoutData | WorkoutInDb>(
     workout
       ? workout
@@ -71,6 +80,7 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
   const [superSetToAppend, setSuperSetToAppend] = useState<Exercise[] | null>(
     null
   )
+  const [submitting, setSubmitting] = useState(false)
 
   const supersetBtn = useRef<HTMLButtonElement>(null)
   const exerciseRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -79,6 +89,7 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
 
   const handleSubmitWorkout = async (e: any) => {
     e.preventDefault()
+    setSubmitting(true)
     const submitType = e.nativeEvent.submitter.value
     const workoutData = {
       ...data,
@@ -102,11 +113,14 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
     } catch (e: any) {
       if (e.response.data.error) toast.error(e.response.data.error)
       else toast.error('Something went wrong.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
   const handleDeleteWorkout = async () => {
     if (!workout) return
+    setSubmitting(true)
     try {
       await axios.delete(`/api/workouts/${workout.id}`)
       router.replace('/workouts')
@@ -114,6 +128,8 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
     } catch (e: any) {
       if (e.response.data.error) toast.error(e.response.data.error)
       else toast.error('Something went wrong.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -131,7 +147,7 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
             enableTabLoop={false}
           />
         ) : (
-          <TextInput
+          <SearchInput
             name={input.name}
             type={input.type}
             value={data[input.name as keyof typeof data] as string}
@@ -141,7 +157,16 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
                 [input.name]: e.target.value,
               }))
             }}
-            className="bg-gray-700"
+            input={data[input.name as keyof typeof data] as string}
+            items={
+              input.name === 'location'
+                ? uniqueHistory.location
+                : uniqueHistory.workout
+            }
+            onClick={(item) =>
+              setData((prev) => ({ ...prev, [input.name]: item }))
+            }
+            className="bg-gray-700 relative"
           />
         )}
       </div>
@@ -159,6 +184,7 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
         <ExerciseForm
           exercises={exercises}
           setExercises={setExercises}
+          exerciseNames={uniqueHistory.exercise}
           index={index}
         />
       </div>
@@ -451,22 +477,23 @@ export default function WorkoutForm({ workout }: WorkoutFormProps) {
         />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <Button
-          type="submit"
+        <SubmitButton
+          disabled={submitting}
           value={'save'}
-          className="text-sm bg-gray-700 hover:bg-green-500 active:bg-green-500"
+          className="text-sm bg-gray-700 flex justify-center [&:not(:disabled)]:hover:bg-green-500 [&:not(:disabled)]:active:bg-green-500"
         >
           Save
-        </Button>
-        <Button
-          type="submit"
+        </SubmitButton>
+        <SubmitButton
+          disabled={submitting}
           value={'exit'}
-          className="text-sm bg-gray-700 hover:bg-green-500 active:bg-green-500"
+          className="text-sm bg-gray-700 flex justify-center [&:not(:disabled)]:hover:bg-green-500 [&:not(:disabled)]:active:bg-green-500"
         >
           Save & Exit
-        </Button>
+        </SubmitButton>
       </div>
       <Button
+        disabled={submitting}
         type="button"
         onClick={handleDeleteWorkout}
         className="mr-auto !w-fit !p-0 mt-6 underline underline-offset-2 text-sm text-gray-400"

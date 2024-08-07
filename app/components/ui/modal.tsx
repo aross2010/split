@@ -4,11 +4,17 @@ import { FaXmark } from 'react-icons/fa6'
 
 type ModalProps = {
   button: React.RefObject<HTMLButtonElement>
+  fullScreen?: boolean
   onClose?: () => void
   children?: React.ReactNode
 }
 
-export default function Modal({ children, button, onClose }: ModalProps) {
+export default function Modal({
+  children,
+  button,
+  fullScreen,
+  onClose,
+}: ModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -49,17 +55,22 @@ export default function Modal({ children, button, onClose }: ModalProps) {
     <Fragment>
       {isOpen && (
         <Fragment>
-          <div className="fixed inset-0 bg-black bg-opacity-40"></div>
+          <div className="fixed inset-0 bg-black bg-opacity-75 z-10"></div>
           <div
             ref={ref}
-            className="fixed flex flex-col overflow-y-auto top-0 sm:top-1/2 left-1/2 transform -translate-x-1/2 sm:-translate-y-1/2 sm:h-auto h-screen bg-gray-700 px-4 py-2 sm:rounded-md shadow-lg z-20 w-full max-w-[450px]"
+            className={`fixed flex flex-col overflow-y-auto ${
+              fullScreen
+                ? 'h-screen top-0'
+                : 'h-auto -translate-y-1/2 top-1/2 rounded-md'
+            } left-1/2 transform -translate-x-1/2 bg-gray-700 px-4 py-2 shadow-lg z-20 w-full max-w-[450px]`}
           >
             <button
               onClick={close}
-              className="ml-auto rounded-md p-2 text-gray-300 hover:bg-gray-500 transition-colors"
+              className="ml-auto rounded-md p-2 text-gray-300 hover:bg-gray-500 transition-colors modal-button-close"
             >
               <FaXmark />
             </button>
+
             {children}
           </div>
         </Fragment>
