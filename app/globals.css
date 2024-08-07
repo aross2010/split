@@ -43,3 +43,13 @@ input[type='number'] {
 input[type='checkbox']:checked + label {
   @apply text-white bg-violet-400;
 }
+
+.dropdown-container::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-y: auto;
+}

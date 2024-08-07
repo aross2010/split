@@ -1,6 +1,6 @@
 'use client'
 
-import { ExerciseStatsType, WorkoutInDb } from '../libs/types'
+import { ChartData, ExerciseStatsType, WorkoutInDb } from '../libs/types'
 import { useState, useEffect, useRef, Fragment } from 'react'
 import Dropdown from './ui/dropdown'
 import DropdownList from './ui/dropdown-list'
@@ -10,16 +10,7 @@ import Button from './ui/button'
 import { getExerciseStats } from '../functions/get-exercises-stats'
 import { BiCalendarCheck } from 'react-icons/bi'
 import { RiBracesFill } from 'react-icons/ri'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts'
+import { motion } from 'framer-motion'
 import {
   FaLocationDot,
   FaArrowTrendDown,
@@ -31,8 +22,8 @@ import Modal from './ui/modal'
 import SubmitButton from './ui/submit-btn'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { set } from 'react-datepicker/dist/date_utils'
 import SearchInput from './ui/search-input'
+import ChartLine from './ui/chart-line'
 
 type ExerciseStatsProps = {
   exerciseNames: string[]
@@ -79,8 +70,6 @@ export default function ExerciseStats({
   const [search, setSearch] = useState('')
   const [selectedExercise, setSelectedExercise] =
     useState<ExerciseStatsType | null>(null)
-  const [chartData, setChartData] = useState(null)
-
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -157,7 +146,7 @@ export default function ExerciseStats({
           value={selectedExercise[value]}
           link={
             value === 'totalWorkouts'
-              ? `/workouts?name=${selectedExercise.name}`
+              ? `/workouts?exercise=${selectedExercise.name}`
               : undefined
           }
         />
@@ -169,6 +158,7 @@ export default function ExerciseStats({
       <div className="w-full max-w-[400px] relative">
         <SearchInput
           className="exercise-search"
+          autoFocus
           type="text"
           value={search}
           input={search}
@@ -181,7 +171,12 @@ export default function ExerciseStats({
         />
       </div>
       {selectedExercise && (
-        <div className="mt-12 w-full max-w-[700px] rounded-md p-4 bg-gray-700">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mt-12 w-full max-w-[700px] rounded-md p-4 bg-gray-700"
+        >
           <h3 className="font-medium text-lg">{selectedExercise.name}</h3>
           <Button
             ref={editButtonRef}
@@ -194,7 +189,16 @@ export default function ExerciseStats({
           <div className="grid sm:grid-cols-3 grid-cols-2 sm:gap-3 gap-2 w-full mt-6">
             {renderedFacts}
           </div>
-        </div>
+          <div className="mt-6">
+            {selectedExercise.topSets.length >= 2 ? (
+              <ChartLine chartData={selectedExercise.topSets} />
+            ) : (
+              <span className="text-gray-400 ">
+                Not enough data to display progression chart.
+              </span>
+            )}
+          </div>
+        </motion.div>
       )}
     </div>
   )

@@ -23,12 +23,18 @@ export const getExerciseStats = (
         exerciseStats.totalWorkouts++
         locations.add(workout.location)
         const topSetInWorkout = {
-          date: workout.date,
-          location: workout.location,
-          rpe: null as number | null,
-          reps: null as number | null,
-          weight: 0,
-          workoutId: workout.id,
+          header: `${new Date(workout.date).toLocaleDateString('en-US', {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+          })}`,
+
+          data: {
+            rpe: null as number | null,
+            reps: null as number | null,
+            weight: 0,
+            workoutId: workout.id,
+          },
         }
         exercise.sets.forEach((set) => {
           exerciseStats.totalSets++
@@ -40,16 +46,16 @@ export const getExerciseStats = (
                 ? set.weight
                 : Math.min(exerciseStats.PL, set.weight)
             if (
-              !topSetInWorkout.weight ||
-              set.weight > topSetInWorkout.weight
+              !topSetInWorkout.data.weight ||
+              set.weight > topSetInWorkout.data.weight
             ) {
-              topSetInWorkout.weight = set.weight
-              topSetInWorkout.rpe = set.rpe ?? null
-              topSetInWorkout.reps = set.reps ?? null
+              topSetInWorkout.data.weight = set.weight
+              topSetInWorkout.data.rpe = set.rpe ?? null
+              topSetInWorkout.data.reps = set.reps ?? null
             }
           }
         })
-        if (topSetInWorkout.weight !== 0)
+        if (topSetInWorkout.data.weight !== 0)
           exerciseStats.topSets.push(topSetInWorkout)
       }
     })

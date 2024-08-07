@@ -11,7 +11,7 @@ export default async function Exercises() {
   if (!session) redirect('/')
 
   const workouts = await getWorkouts(session.user.id)
-  const exerciseNames = getExerciseNames(workouts) as string[]
+  const exerciseNames = getExerciseNames(workouts.reverse()) as string[]
 
   return (
     <section className="flex flex-col items-center w-full max-w-[600px]">

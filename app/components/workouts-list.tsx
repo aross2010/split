@@ -11,8 +11,7 @@ import { IoIosCloseCircle } from 'react-icons/io'
 import { filterWorkouts } from '../functions/filter-workouts'
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6'
 import Button from './ui/button'
-import Link from 'next/link'
-import { set } from 'react-datepicker/dist/date_utils'
+import { motion } from 'framer-motion'
 
 type WorkoutsProps = {
   workouts: WorkoutInDb[]
@@ -53,6 +52,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
 
   useEffect(() => {
     setWorkoutsToDisplay(filterWorkouts(filters, workouts))
+    setURLParams(filters)
   }, [filters])
 
   useEffect(() => {
@@ -197,7 +197,14 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
       if (filterType === 'exercise') {
         return Array.from(filterValue).map((exercise) => {
           return (
-            <div
+            <motion.div
+              layout
+              initial={{ opacity: 0, scale: 0.75 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.25,
+              }}
               key={exercise}
               className="bg-gray-600 py-1 px-3 flex items-center gap-2 rounded-full"
             >
@@ -209,12 +216,19 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
               >
                 <IoIosCloseCircle />
               </button>
-            </div>
+            </motion.div>
           )
         })
       } else if (filterType === 'workout' || filterType === 'location')
         return (
-          <div
+          <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.75 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.25,
+            }}
             key={filterType}
             className="bg-gray-600 py-1 px-3 flex items-center gap-2 rounded-full"
           >
@@ -226,7 +240,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
             >
               <IoIosCloseCircle />
             </button>
-          </div>
+          </motion.div>
         )
     }
   )
@@ -277,7 +291,13 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
         </p>
       )}
       {workoutsToDisplay.length > 0 && (
-        <div className="px-2 mb-0.5 flex items-center justify-between text-gray-200">
+        <motion.div
+          layout
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="px-2 mb-0.5 flex items-center justify-between text-gray-200"
+        >
           <div className="flex items-center gap-2">
             <span>Sort by:</span>
             <button
@@ -299,7 +319,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
             {workoutsToDisplay.length}{' '}
             {workoutsToDisplay.length == 1 ? 'Workout' : 'Workouts'}
           </span>
-        </div>
+        </motion.div>
       )}
 
       <ul className="flex flex-col gap-6">{renderedWorkouts}</ul>

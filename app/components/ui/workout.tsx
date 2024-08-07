@@ -6,6 +6,7 @@ import { Fragment } from 'react'
 import { FaLocationDot } from 'react-icons/fa6'
 import { FaXmark } from 'react-icons/fa6'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 type WorkoutProps = {
   workout: WorkoutInDb
@@ -21,7 +22,14 @@ export default function Workout({ workout }: WorkoutProps) {
   }, 0)
 
   return (
-    <div className="w-full rounded-xl bg-gray-700">
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.75 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.15 }}
+      viewport={{ once: true }}
+      className="w-full rounded-xl bg-gray-700"
+    >
       <div className="bg-violet-400 px-4 py-2 rounded-t-xl flex items-center justify-between">
         <h2 className="font-medium text-lg">{workoutName}</h2>
         <h2 className="font-medium">
@@ -142,6 +150,6 @@ export default function Workout({ workout }: WorkoutProps) {
           Edit
         </Link>
       </div>
-    </div>
+    </motion.div>
   )
 }

@@ -1,5 +1,5 @@
 'use client'
-import { on } from 'events'
+import { motion } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 
 type DropdownProps = {
@@ -48,14 +48,21 @@ export default function Dropdown({
   })
 
   return (
-    <div
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={
+        isOpenedByButton
+          ? { height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }
+          : {}
+      }
+      transition={{ duration: 0.25 }}
       ref={ref}
       hidden={isOpenedByButton ? !isOpen : !opener}
-      className={`absolute border border-gray-500 shadow-xl w-full rounded-md py-3 right-0 top-full dropdown-container ${
+      className={`absolute border border-gray-500 z-10 shadow-xl w-full rounded-md py-3 right-0 top-full dropdown-container ${
         isOpenedByButton ? 'mt-0.5' : 'mt-1.5'
       } bg-gray-700 overflow-y-auto max-h-[30rem]`}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }

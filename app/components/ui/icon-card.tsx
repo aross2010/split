@@ -16,6 +16,8 @@ export default function IconCard({
   link,
   className,
 }: IconCardProps) {
+  const isSingular = value == 1 && title !== 'PR' && title !== 'PL'
+
   const card = (
     <div
       className={`rounded-lg p-3 flex flex-col gap-6 bg-gray-600 items-center text-center ${
@@ -27,7 +29,9 @@ export default function IconCard({
       </div>
       <div>
         <h4 className="text-gray-200 text-lg">{value}</h4>
-        <h3 className="font-semibold text-lg">{title}</h3>
+        <h3 className="font-semibold text-lg">
+          {isSingular ? title.slice(0, -1) : title}
+        </h3>
       </div>
     </div>
   )

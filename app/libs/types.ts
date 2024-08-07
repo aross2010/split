@@ -93,12 +93,15 @@ export type ExerciseStatsType = {
   totalLocations: number
   PR: number
   PL: number
-  topSets: {
-    date: Date
-    location: string
+  topSets: ChartData
+}
+
+export type ChartData = {
+  header: string
+  data: {
     rpe: number | null
     reps: number | null
     weight: number
     workoutId: string
-  }[]
-}
+  }
+}[]

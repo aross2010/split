@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../libs/prismadb'
-import { skip } from 'node:test'
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const { id } = params
+
   let res = []
   try {
     res = await prisma.workout.findMany({

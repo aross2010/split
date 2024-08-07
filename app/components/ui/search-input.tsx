@@ -32,6 +32,8 @@ export default function SearchInput({
     setSelectedIndex(0)
   }, [input])
 
+  const isOpen = results.length > 0 && input.length > 0 && dropdownOpen
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (results.length === 0) return
 
@@ -42,7 +44,7 @@ export default function SearchInput({
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setSelectedIndex((prevIndex - 1 + results.length) % results.length)
-    } else if (e.key === 'Enter' || e.key === 'Tab') {
+    } else if (e.key === 'Enter' || (e.key === 'Tab' && isOpen)) {
       e.preventDefault()
       onClick(results[selectedIndex])
       setDropdownOpen(false)
@@ -66,7 +68,7 @@ export default function SearchInput({
         autoComplete="off"
         {...rest}
       />
-      <Dropdown opener={results.length > 0 && input.length > 0 && dropdownOpen}>
+      <Dropdown opener={isOpen}>
         <DropdownList
           list={results}
           onClick={onClick}

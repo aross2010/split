@@ -1,5 +1,5 @@
 'use client'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import TextInput from './ui/text-input'
 import ExerciseForm from './exercise-form'
 import DatePicker from 'react-datepicker'
@@ -34,23 +34,6 @@ const inputs = [
   },
 ] as const
 
-const BASE_EXERCISE = {
-  name: '',
-  sets: [
-    {
-      reps: null,
-      partialReps: null,
-      weight: null,
-      rpe: null,
-      inDropset: false,
-      id: Math.random().toString(),
-    },
-  ],
-  dropsets: [],
-  inSuperSet: false,
-  id: 'werewrew',
-} as Exercise
-
 type WorkoutFormProps = {
   workout?: WorkoutInDb
   uniqueHistory: FiltersData
@@ -74,7 +57,26 @@ export default function WorkoutForm({
     workout ? workout.date : new Date()
   )
   const [exercises, setExercises] = useState<Exercise[]>(
-    workout ? workout.exercises : [BASE_EXERCISE]
+    workout
+      ? workout.exercises
+      : [
+          {
+            name: '',
+            sets: [
+              {
+                reps: null,
+                partialReps: null,
+                weight: null,
+                rpe: null,
+                inDropset: false,
+                id: Math.random().toString(),
+              },
+            ],
+            dropsets: [],
+            inSuperSet: false,
+            id: Math.random().toString(),
+          },
+        ]
   )
   const [activeSuperSet, setActiveSuperSet] = useState<Exercise[]>([])
   const [superSetToAppend, setSuperSetToAppend] = useState<Exercise[] | null>(
@@ -99,16 +101,18 @@ export default function WorkoutForm({
     try {
       if (!workout) {
         const res = await axios.post('/api/workouts', workoutData)
+        toast.success('Workout saved successfully.')
         if (submitType === 'exit') {
           router.replace('/workouts')
+          router.refresh()
         }
-        toast.success('Workout saved successfully.')
       } else {
         const res = await axios.put(`/api/workouts/${workout.id}`, workoutData)
+        toast.success('Workout updated successfully.')
         if (submitType === 'exit') {
           router.replace('/workouts')
+          router.refresh()
         }
-        toast.success('Workout updated successfully.')
       }
     } catch (e: any) {
       if (e.response.data.error) toast.error(e.response.data.error)
@@ -123,8 +127,9 @@ export default function WorkoutForm({
     setSubmitting(true)
     try {
       await axios.delete(`/api/workouts/${workout.id}`)
-      router.replace('/workouts')
       toast.success('Workout deleted successfully.')
+      router.replace('/workouts')
+      router.refresh()
     } catch (e: any) {
       if (e.response.data.error) toast.error(e.response.data.error)
       else toast.error('Something went wrong.')
@@ -211,13 +216,22 @@ export default function WorkoutForm({
         id: Math.random().toString(),
       },
     ])
-    if (exercises.length > 0) {
-      const lastExerciseRef =
-        exerciseRefs.current[exerciseRefs.current.length - 1]
-      if (lastExerciseRef) {
-        lastExerciseRef.scrollIntoView({ behavior: 'smooth' })
+    setTimeout(() => {
+      if (exercises.length > 0) {
+        const lastExerciseRef =
+          exerciseRefs.current[exerciseRefs.current.length - 1]
+        if (lastExerciseRef) {
+          lastExerciseRef.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
+          const exercieNameInput = lastExerciseRef.querySelector(
+            'input[type="text"]'
+          ) as HTMLInputElement
+          exercieNameInput?.focus()
+        }
       }
-    }
+    }, 50)
   }
 
   const removeExerciseFromSuperset = (
