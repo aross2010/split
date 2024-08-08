@@ -64,7 +64,7 @@ export default function SignIn({ setIsSignIn, isSignIn }: SignInProps) {
         </SubmitButton>
       </form>
       <span className="block mb-4">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <button
           onClick={() => setIsSignIn(false)}
           className="text-violet-400 hover:underline font-medium"
