@@ -35,7 +35,7 @@ export const getDashboardData = (workouts: WorkoutInDb[]) => {
     if (isStreakAlive) {
       const workoutDate = new Date(new Date(date).toLocaleDateString())
       const days = Math.abs(daysBetween(workoutDate, streakDate))
-      if (days <= 1) {
+      if (days < 1) {
         currentWorkoutStreak++
         streakDate = workoutDate
       } else {
