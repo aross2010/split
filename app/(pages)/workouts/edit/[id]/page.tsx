@@ -8,6 +8,13 @@ import { FiltersData, WorkoutInDb } from '@/app/libs/types'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Edit Workout',
+  description: 'Edit your workout.',
+}
+
 export default async function EditWorkout({
   params,
 }: {

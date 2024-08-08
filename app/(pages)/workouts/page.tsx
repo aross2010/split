@@ -7,20 +7,13 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-const filters = [
-  {
-    label: 'Workout',
-    value: 'workouts',
-  },
-  {
-    label: 'Location',
-    value: 'locations',
-  },
-  {
-    label: 'Exercise',
-    value: 'exercises',
-  },
-] as const
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Workouts',
+  description:
+    'Sort and filter through your workout history, or create a new workout.',
+}
 
 export default async function Workouts() {
   const session = await getSession()

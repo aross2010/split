@@ -2,8 +2,14 @@ import ExerciseStats from '@/app/components/exercises-stats'
 import { getExerciseNames } from '@/app/functions/get-filters'
 import { getSession } from '@/app/functions/get-session'
 import { getWorkouts } from '@/app/functions/get-workouts'
+import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: 'Exercises',
+  description: 'View your stats and progress for all exercises.',
+}
 
 export default async function Exercises() {
   const session = await getSession()

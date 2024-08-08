@@ -7,7 +7,6 @@ Features to add:
 - Add demo login button (single button press)
 - When inside an input and adding a new set, don't close input keyboard
 - Highlight the flitered Exercise in the list of workouts
-- Increament chart by 2.5 or 5 lbs (for exercise progression chart)
 - PWAs
 - add meta data
 

@@ -6,6 +6,13 @@ import { FiltersData } from '@/app/libs/types'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'New Workout',
+  description: 'Create a new workout.',
+}
+
 export default async function NewWorkout() {
   const session = await getSession()
 

@@ -15,8 +15,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: 'Split',
-  description:
-    'Split is a minimalistic workout tracker to help you stay on track with your fitness goals.',
+  description: 'Split is a workout tracker web application.',
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({
