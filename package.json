@@ -14,7 +14,6 @@
     "@prisma/client": "^5.5.2",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
-    "chroma-js": "^2.6.0",
     "framer-motion": "^11.3.22",
     "next": "14.2.5",
     "next-auth": "^4.24.7",

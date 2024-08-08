@@ -8,6 +8,7 @@ import {
   Legend,
 } from 'recharts'
 import chroma from 'chroma-js'
+import useWindowSizeHook from '@/app/hooks/window-size'
 
 type ChartBarProps = {
   chartData: Map<string, number>
@@ -29,6 +30,8 @@ const COLORS = [
 ]
 
 export default function ChartPie({ chartData, tooltipLabel }: ChartBarProps) {
+  const width = useWindowSizeHook()
+
   const data = Array.from(chartData, ([name, value]) => ({ name, value })).sort(
     (a, b) => b.value - a.value
   )
@@ -78,11 +81,13 @@ export default function ChartPie({ chartData, tooltipLabel }: ChartBarProps) {
             />
           }
         />
-        <Legend
-          layout="vertical"
-          align="left"
-          verticalAlign="middle"
-        />
+        {width > 768 && (
+          <Legend
+            layout="vertical"
+            align="left"
+            verticalAlign="middle"
+          />
+        )}
       </PieChart>
     </ResponsiveContainer>
   )

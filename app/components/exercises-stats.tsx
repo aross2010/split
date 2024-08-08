@@ -143,7 +143,9 @@ export default function ExerciseStats({
           key={title}
           title={title}
           icon={icon}
-          value={selectedExercise[value]}
+          value={`${selectedExercise[value]} ${
+            fact.value == 'PR' || fact.value == 'PL' ? 'lbs' : ''
+          }`}
           link={
             value === 'totalWorkouts'
               ? `/workouts?exercise=${selectedExercise.name}`

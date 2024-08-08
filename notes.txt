@@ -7,8 +7,7 @@ Features to add:
 - Add demo login button (single button press)
 - When inside an input and adding a new set, don't close input keyboard
 - Highlight the flitered Exercise in the list of workouts
-- PWAs
-- add meta data
+
 
 Etc: 
 - ADD a README providing steps to download into mobile and desktop apps
