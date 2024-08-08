@@ -15,6 +15,8 @@ import IconCard from './ui/icon-card'
 import ChartBar from './ui/chart-bar'
 import { Tooltip } from 'recharts'
 import ChartPie from './ui/chart-pie'
+import { Fragment } from 'react'
+import Link from 'next/link'
 
 type DashboardProps = {
   dashboardData: DashboardData
@@ -163,12 +165,27 @@ export default function Dashboard({ dashboardData, name }: DashboardProps) {
       <h3 className="text-gray-400 mb-8 text-lg">
         Here&apos;s a quick overview of all your workouts:
       </h3>
-      <ul className="grid xl:grid-cols-8 gap-3 sm:grid-cols-4 grid-cols-2 ">
-        {renderedFacts}
-      </ul>
-      <ul className="grid mt-3 gap-3 md:grid-cols-2 gris-cols-1">
-        {renderedGraphs}
-      </ul>
+      {dashboardData.totalWorkouts === 0 ? (
+        <span>
+          You don't have any workouts yet. Get started by{' '}
+          <Link
+            href="/workouts"
+            className="font-medium underline underline-offset-2"
+          >
+            adding a workout
+          </Link>
+          .
+        </span>
+      ) : (
+        <Fragment>
+          <ul className="grid xl:grid-cols-8 gap-3 sm:grid-cols-4 grid-cols-2 ">
+            {renderedFacts}
+          </ul>
+          <ul className="grid mt-3 gap-3 md:grid-cols-2 gris-cols-1">
+            {renderedGraphs}
+          </ul>
+        </Fragment>
+      )}
     </section>
   )
 }
