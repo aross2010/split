@@ -296,9 +296,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
         </div>
       </div>
       {workoutsToDisplay.length === 0 && (
-        <p className="text-center mt-6">
-          No workouts found with the selected filters.
-        </p>
+        <p className="text-center mt-6">No workouts found.</p>
       )}
       {workoutsToDisplay.length > 0 && (
         <motion.div
