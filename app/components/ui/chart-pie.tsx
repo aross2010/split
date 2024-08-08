@@ -7,7 +7,6 @@ import {
   Tooltip,
   Legend,
 } from 'recharts'
-import chroma from 'chroma-js'
 import useWindowSizeHook from '@/app/hooks/window-size'
 
 type ChartBarProps = {
@@ -15,7 +14,6 @@ type ChartBarProps = {
   tooltipLabel: string
 }
 
-const baseColor = chroma('#a78bfa')
 const COLORS = [
   '#a78bfa', // Base color
   '#c8a5fc', // Lighter
