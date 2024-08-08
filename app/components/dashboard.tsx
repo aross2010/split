@@ -109,7 +109,9 @@ export default function Dashboard({ dashboardData, name }: DashboardProps) {
         className="flex w-full h-auto"
       >
         <IconCard
-          value={dashboardData[fact.value] as number}
+          value={`${dashboardData[fact.value] as number} ${
+            fact.value == 'maxPRValue' ? 'lbs' : ''
+          }`}
           title={
             fact.title == 'maxPRExercise'
               ? dashboardData[fact.title]

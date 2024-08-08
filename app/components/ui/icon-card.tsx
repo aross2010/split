@@ -3,7 +3,7 @@ import React, { cloneElement } from 'react'
 
 type IconCardProps = {
   title: string
-  value: number
+  value: number | string
   icon: React.ReactElement
   link?: string
   className?: string
