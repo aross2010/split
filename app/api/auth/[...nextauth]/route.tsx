@@ -1,9 +1,10 @@
-import NextAuth from 'next-auth'
+import NextAuth from 'next-auth/next'
+import prisma from '../../../libs/prismadb'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import prisma from '@/app/libs/prismadb'
 import bcrypt from 'bcrypt'
+import { AuthOptions } from 'next-auth'
 
 const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -48,11 +49,11 @@ const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, account }: any) {
       if (user) token.id = user.id
       return token
     },
-    async session({ session, token }: any) {
+    async session({ session, token, user }: any) {
       session.user.id = token.id
       return session
     },
@@ -64,5 +65,12 @@ const authOptions = {
   debug: process.env.NODE_ENV === 'development',
 }
 
-// @ts-ignore
-export default (req: any, res: any) => NextAuth(req, res, authOptions)
+const handler = NextAuth(authOptions as AuthOptions)
+
+export {
+  handler as GET,
+  handler as POST,
+  handler as PUT,
+  handler as DELETE,
+  authOptions,
+}
