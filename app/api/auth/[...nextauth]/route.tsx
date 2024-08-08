@@ -26,7 +26,6 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials): Promise<any> {
-        console.log(credentials)
         if (!credentials || !credentials.email || !credentials.password)
           throw new Error('Please enter an email and password')
         const user = await prisma.user.findUnique({
@@ -62,7 +61,7 @@ export const authOptions = {
   session: {
     strategy: 'jwt',
   },
-  debug: false,
+  debug: process.env.NODE_ENV === 'development',
 }
 
 const handler = NextAuth(authOptions as any)
