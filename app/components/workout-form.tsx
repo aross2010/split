@@ -155,6 +155,7 @@ export default function WorkoutForm({
           <SearchInput
             name={input.name}
             type={input.type}
+            autoFocus={i === 0 && !workout}
             value={data[input.name as keyof typeof data] as string}
             onChange={(e) => {
               setData((prev) => ({

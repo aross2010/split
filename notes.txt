@@ -1,48 +1,18 @@
 Features to add:
 
-- Save and REMAIN on the edit workout page
-- Superset / dropset / partial reps options
-- Clear all filters options
-- Total Sets in the header of a workout
 - Cycle through exercises for PR on dashboard (carousel, can implement with other dash options)
-- Search function inside dropdown for exercise names
 - Pin today's workout on the dashboard and workouts lists
-- Fix error: Pressing go after inserting a Sets
-- When displaying a list of exercises from a serach, display in MRU order
-- Tags for types of exercises (paused, eccentrics, etc)
 - GitHub like calender to highlight days you have worked out (for dashboard)
 - Have current and all time streaks (above)
-- When editing a workout (or when a workout is not finalized), keep a button that stays on the screen at all times for quick access to edit. It should pop up as a modal that can be exited.
-- Finalize workouts to show data
 - Add demo login button (single button press)
-- Click on a filter to remove it
-- Display sets with the same weight and different sets in same line (ex. 1 x 7, 8 (200lbs))
 - When inside an input and adding a new set, don't close input keyboard
-- If a day is in the future, have it be a scheduled workout
 - Highlight the flitered Exercise in the list of workouts
-- Make add exercise and add set full width buttons
 - Increament chart by 2.5 or 5 lbs (for exercise progression chart)
-- Use select tag for picking an option if possible
-- Show number of total workouts on workouts page
-- Have weight soley on home page
 - PWAs
 - add meta data
-
-Low Priority Features:
-- Tags to distinguish muscle group for an exercise (weights - 1 primary, 0.5 secondary) maybe?
-- Location pages with the ability to add notes for a Location (maybe?)
-- When a workout is finalized, congratulate if there is a PR
-- Scrolling to select weights, reps, sets?
-- Special icons for holidays
-- Auto save feature (idle for x amount of time when editing)
-- Animate filters when they appear
-
-Exercises Page:
-- Add first time doing, link to recent workout doing, graph, total workouts, reps, sets, PR, 
-
 
 Etc: 
 - ADD a README providing steps to download into mobile and desktop apps
 
 
-- use an overlay on home
+- use an overlay on home guest

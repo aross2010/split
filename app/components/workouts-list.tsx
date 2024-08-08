@@ -264,24 +264,34 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
         <div className="mb-6 flex items-center flex-wrap gap-2 justify-center transition-all">
           {renderedDisplayedFilters}
           {numOfFilters >= 2 && (
-            <button
-              onClick={() => {
-                setFilters({
-                  workout: null,
-                  exercise: new Set(),
-                  location: null,
-                })
-                setURLParams({
-                  workout: null,
-                  exercise: new Set(),
-                  location: null,
-                })
+            <motion.div
+              layout
+              initial={{ opacity: 0, scale: 0.75 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.25,
               }}
-              type="button"
-              className="bg-gray-700 py-1 px-3 flex items-center gap-2 rounded-full text-gray-400 hover:bg-red-500 hover:text-gray-50 transition-all"
             >
-              Clear all
-            </button>
+              <button
+                onClick={() => {
+                  setFilters({
+                    workout: null,
+                    exercise: new Set(),
+                    location: null,
+                  })
+                  setURLParams({
+                    workout: null,
+                    exercise: new Set(),
+                    location: null,
+                  })
+                }}
+                type="button"
+                className="bg-gray-700 py-1 px-3 flex items-center gap-2 rounded-full text-gray-400 hover:bg-red-500 hover:text-gray-50 transition-all"
+              >
+                Clear all
+              </button>
+            </motion.div>
           )}
         </div>
       </div>

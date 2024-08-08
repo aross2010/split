@@ -14,7 +14,7 @@ export default async function Exercises() {
   const exerciseNames = getExerciseNames(workouts.reverse()) as string[]
 
   return (
-    <section className="flex flex-col items-center w-full max-w-[600px]">
+    <section className="flex flex-col items-center w-full max-w-[950px]">
       <h1 className="text-center text-3xl font-medium mb-4">Your Exercises</h1>
       <h3 className="text-gray-200 text-lg text-center">
         Search for an exercise to view your progress

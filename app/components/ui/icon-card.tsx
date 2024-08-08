@@ -16,20 +16,21 @@ export default function IconCard({
   link,
   className,
 }: IconCardProps) {
-  const isSingular = value == 1 && title !== 'PR' && title !== 'PL'
+  const isSingular =
+    value == 1 && title !== 'PR' && title !== 'PL' && title !== 'Current Streak'
 
   const card = (
     <div
-      className={`rounded-lg p-3 flex flex-col gap-6 bg-gray-600 items-center text-center ${
+      className={`rounded-lg p-3 flex flex-col w-full gap-6 bg-gray-600 items-center text-center ${
         link ? 'hover:brightness-125 transition-all' : ''
       } ${className}`}
     >
-      <div className="h-14 w-14 rounded-full flex justify-center items-center bg-violet-400/25">
+      <div className="p-3 rounded-full flex justify-center items-center bg-violet-400/25">
         {cloneElement(icon, { className: 'text-3xl text-violet-400' })}
       </div>
       <div>
-        <h4 className="text-gray-200 text-lg">{value}</h4>
-        <h3 className="font-semibold text-lg">
+        <h4 className="text-gray-200">{value}</h4>
+        <h3 className="font-semibold">
           {isSingular ? title.slice(0, -1) : title}
         </h3>
       </div>
@@ -38,7 +39,7 @@ export default function IconCard({
 
   return link ? (
     <Link
-      className="rounded-lg"
+      className="rounded-lg h-auto w-full flex"
       href={link}
     >
       {card}

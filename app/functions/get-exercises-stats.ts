@@ -26,9 +26,8 @@ export const getExerciseStats = (
           header: `${new Date(workout.date).toLocaleDateString('en-US', {
             month: 'numeric',
             day: 'numeric',
-            year: 'numeric',
+            year: '2-digit',
           })}`,
-
           data: {
             rpe: null as number | null,
             reps: null as number | null,

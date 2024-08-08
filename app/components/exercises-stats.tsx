@@ -154,7 +154,7 @@ export default function ExerciseStats({
     })
 
   return (
-    <div className="mt-12 w-full flex flex-col items-center">
+    <div className="mt-8 w-full flex flex-col items-center">
       <div className="w-full max-w-[400px] relative">
         <SearchInput
           className="exercise-search"
@@ -175,7 +175,7 @@ export default function ExerciseStats({
           initial={{ opacity: 0, scale: 0.75 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="mt-12 w-full max-w-[700px] rounded-md p-4 bg-gray-700"
+          className="mt-12 w-full rounded-lg p-4 bg-gray-700"
         >
           <h3 className="font-medium text-lg">{selectedExercise.name}</h3>
           <Button
@@ -186,14 +186,17 @@ export default function ExerciseStats({
             Edit Name
           </Button>
           <Modal button={editButtonRef}>{editNameModal}</Modal>
-          <div className="grid sm:grid-cols-3 grid-cols-2 sm:gap-3 gap-2 w-full mt-6">
+          <div className="grid sm:grid-cols-3 md:grid-cols-6 grid-cols-2 sm:gap-3 gap-2 w-full mt-6">
             {renderedFacts}
           </div>
-          <div className="mt-6">
+          <div className="mt-8">
             {selectedExercise.topSets.length >= 2 ? (
-              <ChartLine chartData={selectedExercise.topSets} />
+              <Fragment>
+                <h3 className="font-medium text-lg mb-4">Progression Chart</h3>
+                <ChartLine chartData={selectedExercise.topSets} />
+              </Fragment>
             ) : (
-              <span className="text-gray-400 ">
+              <span className="text-gray-400">
                 Not enough data to display progression chart.
               </span>
             )}

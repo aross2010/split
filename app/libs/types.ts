@@ -105,3 +105,19 @@ export type ChartData = {
     workoutId: string
   }
 }[]
+
+export type DashboardData = {
+  totalWorkouts: number
+  totalSets: number
+  totalReps: number
+  totalExercises: number
+  totalWorkoutNames: number
+  totalLocations: number
+  PRs: Map<string, number>
+  maxPRValue: number
+  maxPRExercise: string
+  popularExercises: Map<string, number>
+  locations: Map<string, number>
+  workoutNames: Map<string, number>
+  currentWorkoutStreak: number
+}

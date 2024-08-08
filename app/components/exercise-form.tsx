@@ -5,7 +5,7 @@ import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa'
 import Modal from './ui/modal'
 import Button from './ui/button'
 import { Set } from '../libs/types'
-import { newDate, set } from 'react-datepicker/dist/date_utils'
+import { motion } from 'framer-motion'
 import SearchInput from './ui/search-input'
 
 type ExerciseFormProps = {
@@ -170,7 +170,11 @@ export default function ExerciseForm({
 
   const renderedSetInputs = exercises[index].sets?.map((set, i) => {
     return (
-      <div
+      <motion.div
+        layout
+        initial={{ opacity: 0, scale: 0.75 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25 }}
         key={i}
         className="flex items-center gap-2"
       >
@@ -214,7 +218,7 @@ export default function ExerciseForm({
         >
           <FaMinusCircle />
         </button>
-      </div>
+      </motion.div>
     )
   })
 
@@ -349,7 +353,12 @@ export default function ExerciseForm({
   )
 
   return (
-    <section className="bg-gray-800 p-3 rounded-md flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.75 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="bg-gray-800 p-3 rounded-md flex flex-col"
+    >
       <div hidden={!isOpen}>
         <div className="flex flex-col gap-2 mb-6">
           <label htmlFor="exerciseName">Exercise Name</label>
@@ -374,6 +383,7 @@ export default function ExerciseForm({
               })
             }}
             items={exerciseNames}
+            className="!h-auto"
           />
         </div>
         <div className="mb-12 flex flex-col gap-2">{renderedSetInputs}</div>
@@ -438,6 +448,6 @@ export default function ExerciseForm({
           Edit
         </Button>
       </div>
-    </section>
+    </motion.div>
   )
 }

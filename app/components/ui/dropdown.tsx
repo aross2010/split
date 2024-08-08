@@ -49,7 +49,7 @@ export default function Dropdown({
 
   return (
     <motion.div
-      initial={{ height: 0, opacity: 0 }}
+      initial={isOpenedByButton ? { height: 0, opacity: 0 } : {}}
       animate={
         isOpenedByButton
           ? { height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }
