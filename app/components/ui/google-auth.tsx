@@ -12,7 +12,7 @@ export default function GoogleAuth() {
       <button
         onClick={async () => {
           await signIn('google', {
-            callbackUrl: 'http://localhost:3000',
+            callbackUrl: 'https://split-test.vercel.app',
           })
         }}
         type="button"
