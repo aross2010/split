@@ -167,7 +167,7 @@ export default function Dashboard({ dashboardData, name }: DashboardProps) {
       </h3>
       {dashboardData.totalWorkouts === 0 ? (
         <span>
-          You don't have any workouts yet. Get started by{' '}
+          You don&apos;t have any workouts yet. Get started by{' '}
           <Link
             href="/workouts"
             className="font-medium underline underline-offset-2"
