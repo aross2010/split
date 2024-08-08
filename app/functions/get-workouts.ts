@@ -1,6 +1,6 @@
 export const getWorkouts = async (userId: string) => {
   const res = await fetch(
-    `https://split-test.vercel.app/api/workouts/user/${userId}`
+    `https://splitv1.vercel.app/api/workouts/user/${userId}`
   )
 
   if (!res.ok) {

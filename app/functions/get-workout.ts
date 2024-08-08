@@ -1,5 +1,5 @@
 export const getWorkout = async (id: string) => {
-  const res = await fetch(`https://split-test.vercel.app/api/workouts/${id}`, {
+  const res = await fetch(`https://splitv1.vercel.app/api/workouts/${id}`, {
     cache: 'no-store',
   })
 
