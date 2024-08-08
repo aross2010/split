@@ -17,6 +17,7 @@ export default async function Home() {
           Sign in to view your dashboard.
         </h1>
         <form
+          hidden
           action={async () => {
             'use server'
             try {
