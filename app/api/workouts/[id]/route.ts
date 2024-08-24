@@ -113,7 +113,7 @@ export async function DELETE(
   if (!session)
     return NextResponse.json({ error: 'Not authenicated' }, { status: 401 })
 
-  if (session.user.name === 'Demo')
+  if (session.user.email === 'demo@gmail.com')
     return NextResponse.json(
       { error: 'Demo user cannot delete workouts.' },
       { status: 403 }

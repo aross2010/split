@@ -26,8 +26,8 @@ export default function DropdownList({
           <li key={index}>
             <label
               htmlFor={`${item} ${index}`}
-              className={`p-2 hover:bg-violet-400 select-none cursor-pointer !flex justify-between items-center w-full text-left transition-colors ${
-                isChecked ? 'bg-violet-400 text-white' : ''
+              className={`p-2 hover:bg-violet-500 select-none cursor-pointer !flex justify-between items-center w-full text-left transition-colors ${
+                isChecked ? 'bg-violet-500 text-white' : ''
               }  `}
             >
               {item}
@@ -56,8 +56,8 @@ export default function DropdownList({
               onMouseDown={() => {
                 onClick(item)
               }}
-              className={`p-2 hover:bg-violet-300 select-none cursor-pointer !flex justify-between items-center w-full text-left transition-colors ${
-                selectedIndex === index ? 'bg-violet-400' : ''
+              className={`p-2 hover:bg-violet-500 select-none cursor-pointer !flex justify-between items-center w-full text-left transition-colors ${
+                selectedIndex === index ? 'bg-violet-500' : ''
               }`}
             >
               {item}

@@ -6,6 +6,7 @@ import NavAuth from './nav-auth'
 import { FaBars, FaXmark } from 'react-icons/fa6'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 
 type NavContentProps = {
   session: Session | null
@@ -24,13 +25,16 @@ const links = [
 
 export default function NavContent({ session }: NavContentProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   const renderedLinks = links.map((link) => {
     return (
       <Link
         key={link.href}
         replace
-        className="hover:text-violet-400 transition-colors font-medium"
+        className={`hover:text-violet-500 transition-colors font-medium ${
+          pathname === link.href ? 'text-violet-500' : ''
+        }`}
         href={link.href}
       >
         {link.label}
@@ -44,7 +48,7 @@ export default function NavContent({ session }: NavContentProps) {
         key={link.href}
         onClick={() => setIsMenuOpen(false)}
         hidden={session == null}
-        className="rounded-lg hover:text-violet-400 transition-colors font-medium"
+        className="rounded-lg hover:text-violet-500 transition-colors font-medium"
         href={link.href}
       >
         {link.label}
@@ -57,7 +61,7 @@ export default function NavContent({ session }: NavContentProps) {
       <div className="w-full h-[55px] flex justify-between items-center">
         <Link
           href="/"
-          className="text-3xl font-extrabold text-violet-400"
+          className="text-3xl font-extrabold text-violet-500"
           onClick={() => setIsMenuOpen(false)}
         >
           split
@@ -76,7 +80,7 @@ export default function NavContent({ session }: NavContentProps) {
         </div>
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="sm:hidden hover:text-violet-400 transition-colors"
+          className="sm:hidden hover:text-violet-500 transition-colors"
         >
           {!isMenuOpen ? (
             <FaBars className="text-3xl" />

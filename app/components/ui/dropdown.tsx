@@ -58,9 +58,9 @@ export default function Dropdown({
       transition={{ duration: 0.25 }}
       ref={ref}
       hidden={isOpenedByButton ? !isOpen : !opener}
-      className={`absolute border border-gray-500 z-10 shadow-xl w-full rounded-md py-3 right-0 top-full dropdown-container ${
+      className={`absolute border border-gray-600 z-10 shadow-xl w-full rounded-md py-3 right-0 top-full dropdown-container ${
         isOpenedByButton ? 'mt-0.5' : 'mt-1.5'
-      } bg-gray-700 overflow-y-auto max-h-[30rem]`}
+      } bg-gray-800 overflow-y-auto max-h-[30rem]`}
     >
       {children}
     </motion.div>

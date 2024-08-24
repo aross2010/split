@@ -25,7 +25,7 @@
 }
 
 .react-datepicker__input-container input {
-  @apply w-full bg-gray-700 outline-none rounded-md p-3 focus:outline-violet-400 focus:bg-violet-400/25 focus:ring-2 focus:ring-violet-400 shadow-sm;
+  @apply w-full bg-gray-800 outline-none rounded-md p-3 focus:outline-violet-500 focus:bg-violet-500/25 focus:ring-2 focus:ring-violet-500 shadow-sm;
 }
 
 /* Chrome, Safari, Edge */
@@ -41,7 +41,7 @@ input[type='number'] {
 }
 
 input[type='checkbox']:checked + label {
-  @apply text-white bg-violet-400;
+  @apply text-white bg-violet-500;
 }
 
 .dropdown-container::-webkit-scrollbar {
@@ -52,4 +52,27 @@ input[type='checkbox']:checked + label {
   scrollbar-width: none;
   -ms-overflow-style: none;
   overflow-y: auto;
+}
+
+.bg-gradient {
+  background: rgb(92, 130, 246);
+  background: -moz-linear-gradient(
+    130deg,
+    rgba(92, 130, 246, 1) 0%,
+    rgba(139, 92, 246, 1) 50%,
+    rgba(183, 92, 246, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    130deg,
+    rgba(92, 130, 246, 1) 0%,
+    rgba(139, 92, 246, 1) 50%,
+    rgba(183, 92, 246, 1) 100%
+  );
+  background: linear-gradient(
+    130deg,
+    rgba(92, 130, 246, 1) 0%,
+    rgba(139, 92, 246, 1) 50%,
+    rgba(183, 92, 246, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#5c82f6",endColorstr="#b75cf6",GradientType=1);
 }

@@ -187,25 +187,25 @@ export default function ExerciseForm({
         </button>
         <div className="grid grid-cols-4 gap-2">
           {setInputs.map((input, j) => {
+            const { type, label, name } = input
             return (
               <div
                 key={j}
                 className="flex flex-col gap-2"
               >
-                {i == 0 && <label htmlFor={input.name}>{input.label}</label>}
+                {i == 0 && <label htmlFor={name}>{label}</label>}
                 <TextInput
-                  type={input.type}
-                  name={input.name}
-                  id={input.name}
+                  type={type}
+                  name={name}
+                  id={name}
                   min={0}
                   autoComplete="off"
-                  step={input.name === 'rpe' ? 0.5 : 1}
+                  step={name === 'weight' ? 0.5 : name === 'rpe' ? 0.05 : 1}
                   value={
-                    String(exercises[index].sets[i][input.name as keyof Set]) ||
-                    ''
+                    String(exercises[index].sets[i][name as keyof Set]) || ''
                   }
                   onChange={(e) => handleChange(e, i)}
-                  className="!p-2 text-sm"
+                  className="!p-2 text-sm !bg-gray-700"
                 />
               </div>
             )
@@ -259,7 +259,7 @@ export default function ExerciseForm({
                   <ul
                     className={`flex items-center gap-2 ${
                       dropsetToAppend == dropset
-                        ? ' bg-violet-400/75 rounded-md'
+                        ? ' bg-violet-500/75 rounded-md'
                         : ''
                     }`}
                   >
@@ -383,7 +383,7 @@ export default function ExerciseForm({
               })
             }}
             items={exerciseNames}
-            className="!h-auto"
+            className="!h-auto !bg-gray-700"
           />
         </div>
         <div className="mb-12 flex flex-col gap-2">{renderedSetInputs}</div>

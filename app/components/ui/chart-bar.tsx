@@ -104,7 +104,7 @@ export default function ChartBar({
         />
         <Bar
           dataKey="value"
-          fill="#a78bfa"
+          fill="#8b5cf6"
           name="Value"
           radius={[2, 2, 0, 0]}
           barSize={25}

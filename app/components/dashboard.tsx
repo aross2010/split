@@ -125,7 +125,7 @@ export default function Dashboard({ dashboardData, name }: DashboardProps) {
               : undefined
           }
           icon={fact.icon}
-          className="!bg-gray-700"
+          className="!bg-gray-800"
         />
       </motion.div>
     )
@@ -139,7 +139,7 @@ export default function Dashboard({ dashboardData, name }: DashboardProps) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.25, delay: 0.7 + i * 0.1 }}
-        className="w-full rounded-lg p-4 bg-gray-700"
+        className="w-full rounded-lg p-4 bg-gray-800"
       >
         <h3 className="font-medium text-lg mb-4">{graph.title}</h3>
         {graph.type === 'pie' ? (
@@ -170,7 +170,7 @@ export default function Dashboard({ dashboardData, name }: DashboardProps) {
           You don&apos;t have any workouts yet. Get started by{' '}
           <Link
             href="/workouts"
-            className="font-medium underline underline-offset-2"
+            className="font-medium underline underline-offset-2 hover:text-violet-500 transition-colors"
           >
             adding a workout
           </Link>

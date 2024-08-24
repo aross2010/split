@@ -44,9 +44,10 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
     try {
       const data = Object.fromEntries(formData.entries()) as RegisterUserData
       await axios.post('/api/register', data)
+      const { email, password } = data
       const loginData = {
-        email: data.email,
-        password: data.password,
+        email,
+        password,
       }
       await handleLogin(loginData)
     } catch (e: any) {
@@ -67,7 +68,7 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
           type={type}
           name={name}
           id={name}
-          className="!bg-gray-600"
+          className="!bg-gray-700"
         />
       </div>
     )
@@ -80,11 +81,11 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
     >
       <h2 className="text-2xl font-medium mb-4">Sign up</h2>
       <form
-        className="flex flex-col gap-6 mb-4"
+        className="flex flex-col gap-4 mb-4"
         action={registerUser}
       >
         {renderedInputs}
-        <SubmitButton className="flex justify-center bg-violet-400">
+        <SubmitButton className="flex justify-center bg-violet-500">
           Sign up
         </SubmitButton>
       </form>
@@ -94,7 +95,7 @@ export default function SignUp({ setIsSignIn, isSignIn }: SignUpProps) {
           onClick={() => {
             setIsSignIn(true)
           }}
-          className="text-violet-400 hover:underline font-medium"
+          className="text-violet-500 hover:underline font-medium"
         >
           Sign in
         </button>

@@ -8,7 +8,7 @@ import { signOut } from 'next-auth/react'
 import useWindowSizeHook from '../hooks/window-size'
 
 export default function NavAuth({ session }: { session: Session | null }) {
-  const [isSignIn, setIsSignIn] = useState(true)
+  const [isSignIn, setIsSignIn] = useState(false)
   const ref = useRef<HTMLButtonElement>(null)
   const ref2 = useRef<HTMLButtonElement>(null)
 
@@ -19,14 +19,15 @@ export default function NavAuth({ session }: { session: Session | null }) {
       {!session ? (
         <button
           ref={ref}
-          className="font-medium hover:text-violet-400 transition-colors"
+          className="font-medium hover:text-violet-500 transition-colors"
+          id="sign-up"
         >
-          Sign in
+          Sign up
         </button>
       ) : (
         <button
           ref={ref2}
-          className="font-medium hover:text-violet-400 transition-colors"
+          className="font-medium hover:text-violet-500 transition-colors"
         >
           Sign out
         </button>
@@ -41,7 +42,7 @@ export default function NavAuth({ session }: { session: Session | null }) {
             onClick={async () => {
               await signOut({ callbackUrl: '/' })
             }}
-            className="bg-violet-400 text-white px-4 py-2 rounded-md w-fit mb-4 hover:brightness-110 transition-all "
+            className="bg-violet-500 text-white px-4 py-2 rounded-md w-fit mb-4 hover:brightness-110 transition-all "
           >
             Sign out
           </button>

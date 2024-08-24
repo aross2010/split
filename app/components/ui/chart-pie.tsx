@@ -15,7 +15,7 @@ type ChartBarProps = {
 }
 
 const COLORS = [
-  '#a78bfa', // Base color
+  '#8b5cf6', // Base color
   '#c8a5fc', // Lighter
   '#e9b9fe', // Lightest
   '#d5a6f3', // Light purple
@@ -60,7 +60,7 @@ export default function ChartPie({ chartData, tooltipLabel }: ChartBarProps) {
           nameKey="name"
           outerRadius={130}
           innerRadius={10}
-          fill="#a78bfa"
+          fill="#8b5cf6"
           paddingAngle={3}
         >
           {data.map((entry, index) => (

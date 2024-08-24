@@ -61,12 +61,3 @@ model Exercise {
     inSuperSet Boolean
     userId     String  @db.ObjectId
 }
-
-model WeightEntry {
-    id     String   @id @default(auto()) @map("_id") @db.ObjectId
-    weight Float
-    date   DateTime
-    userId String   @db.ObjectId
-
-    @@unique([date, userId])
-}

@@ -127,7 +127,7 @@ export default function ExerciseStats({
           name="newExerciseName"
           className="w-full !bg-gray-600"
         />
-        <SubmitButton className="mt-4 text-sm !w-fit !px-4 !py-2 bg-violet-400">
+        <SubmitButton className="mt-4 text-sm !w-fit !px-4 !py-2 bg-violet-500">
           Change Name
         </SubmitButton>
       </form>
@@ -151,6 +151,7 @@ export default function ExerciseStats({
               ? `/workouts?exercise=${selectedExercise.name}`
               : undefined
           }
+          className="!bg-gray-700"
         />
       )
     })
@@ -177,7 +178,7 @@ export default function ExerciseStats({
           initial={{ opacity: 0, scale: 0.75 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="mt-12 w-full rounded-lg p-4 bg-gray-700"
+          className="mt-12 w-full rounded-lg p-4 bg-gray-800"
         >
           <h3 className="font-medium text-lg">{selectedExercise.name}</h3>
           <Button

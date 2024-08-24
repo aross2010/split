@@ -150,9 +150,9 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
           type="button"
           value={value}
           key={name}
-          className={`flex items-center gap-1 p-2 hover:bg-violet-400 transition-all ${
+          className={`flex items-center gap-1 p-2 hover:bg-violet-500 transition-all ${
             i == 0 ? 'rounded-l-md' : i == 2 ? 'rounded-r-md' : ''
-          } ${activeFilterType == value ? 'bg-violet-400' : ''} `}
+          } ${activeFilterType == value ? 'bg-violet-500' : ''} `}
         >
           {name} <RxCaretDown className="text-gray-200" />{' '}
         </button>
@@ -186,7 +186,10 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
     if (i >= maxDisplayedWorkouts) return
     return (
       <li key={i}>
-        <Workout workout={workout} />
+        <Workout
+          workout={workout}
+          selectedExercises={filters.exercise}
+        />
       </li>
     )
   })
@@ -257,8 +260,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
     <div className="w-full max-w-[550px]">
       <div className="flex flex-col items-center">
         <h3 className="text-xl mb-2">Filter by </h3>
-
-        <div className="mb-6 relative bg-gray-700 rounded-md grid grid-cols-3 gap-0">
+        <div className="mb-6 relative bg-gray-800 rounded-md grid grid-cols-3 gap-0">
           {renderedFilters}
         </div>
         <div className="mb-6 flex items-center flex-wrap gap-2 justify-center transition-all">
@@ -300,7 +302,6 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
       )}
       {workoutsToDisplay.length > 0 && (
         <motion.div
-          layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.15 }}
@@ -313,11 +314,11 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
               onClick={() => setIsSortDesc(!isSortDesc)}
               className=" group flex font-medium items-center gap-1"
             >
-              <span className="group-hover:text-violet-400 transition-all">
+              <span className="group-hover:text-violet-500 transition-all">
                 Date
               </span>
               <FaArrowDown
-                className={`transition-all text-gray-400 text-sm group-hover:text-violet-400 ${
+                className={`transition-all text-gray-400 text-sm group-hover:text-violet-500 ${
                   !isSortDesc ? '-rotate-180' : ''
                 }`}
               />

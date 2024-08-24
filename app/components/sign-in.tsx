@@ -34,7 +34,7 @@ export default function SignIn({ setIsSignIn, isSignIn }: SignInProps) {
     >
       <h2 className="text-2xl font-medium mb-4">Sign in</h2>
       <form
-        className="flex flex-col gap-6 mb-4"
+        className="flex flex-col gap-4 mb-4"
         action={async (formData: FormData) => {
           try {
             const data = Object.fromEntries(formData.entries()) as LoginUserData
@@ -54,12 +54,12 @@ export default function SignIn({ setIsSignIn, isSignIn }: SignInProps) {
                 type={type}
                 name={name}
                 id={name}
-                className="!bg-gray-600"
+                className="!bg-gray-700"
               />
             </div>
           )
         })}
-        <SubmitButton className="flex justify-center bg-violet-400">
+        <SubmitButton className="flex justify-center bg-violet-500">
           Sign in
         </SubmitButton>
       </form>
@@ -67,7 +67,7 @@ export default function SignIn({ setIsSignIn, isSignIn }: SignInProps) {
         Don&apos;t have an account?{' '}
         <button
           onClick={() => setIsSignIn(false)}
-          className="text-violet-400 hover:underline font-medium"
+          className="text-violet-500 hover:underline font-medium"
         >
           Sign up
         </button>

@@ -112,7 +112,7 @@ export default function ChartLine({ chartData }: ChartLineProps) {
         <Line
           type="monotone"
           dataKey="data.weight"
-          stroke="#a78bfa"
+          stroke="#8b5cf6"
           activeDot={{ r: 8 }}
           name="Weight"
         />

@@ -25,13 +25,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+      />
+
       <body
-        className={`${outfit.className} w-full flex flex-col items-center min-h-[120vh] bg-gray-950 overflow-x-hidden text-gray-50 px-3 scroll-smooth`}
+        className={`${outfit.className} w-full flex flex-col items-center min-h-[120vh] bg-gray-950 overflow-x-hidden text-gray-100 px-3 scroll-smooth`}
       >
         <AuthProvider>
           <ToastContext />
           <Navbar />
-          <main className="w-full max-w-[1200px] flex justify-center my-16">
+          <main className="w-full max-w-[1200px] flex justify-center my-12">
             {children}
           </main>
           <Footer />

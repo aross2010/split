@@ -1,12 +1,35 @@
 import { WorkoutInDb } from '../libs/types'
 
 const daysBetween = (start: Date, end: Date) => {
-  const oneDayInMillis = 1000 * 60 * 60 * 24
-  const startMillis = start.getTime()
-  const endMillis = end.getTime()
+  const startAtMidnight = new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    start.getDate()
+  )
+  const endAtMidnight = new Date(
+    end.getFullYear(),
+    end.getMonth(),
+    end.getDate()
+  )
 
-  const differenceInMillis = endMillis - startMillis
+  const differenceInMillis = endAtMidnight.getTime() - startAtMidnight.getTime()
+
+  const oneDayInMillis = 1000 * 60 * 60 * 24
   const differenceInDays = Math.floor(differenceInMillis / oneDayInMillis)
+
+  const today = new Date()
+  const todayAtMidnight = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  )
+
+  if (
+    differenceInDays === 1 &&
+    endAtMidnight.getTime() === todayAtMidnight.getTime()
+  ) {
+    return 0
+  }
 
   return differenceInDays
 }
@@ -35,6 +58,7 @@ export const getDashboardData = (workouts: WorkoutInDb[]) => {
     if (isStreakAlive) {
       const workoutDate = new Date(new Date(date).toLocaleDateString())
       const days = Math.abs(daysBetween(workoutDate, streakDate))
+      console.log(days, workoutDate, streakDate)
       if (days < 1) {
         currentWorkoutStreak++
         streakDate = workoutDate

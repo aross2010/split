@@ -21,12 +21,12 @@ export default function IconCard({
 
   const card = (
     <div
-      className={`rounded-lg p-3 flex flex-col w-full gap-6 bg-gray-600 items-center text-center ${
+      className={`rounded-lg p-3 flex flex-col w-full gap-6 bg-gray-800 items-center text-center ${
         link ? 'hover:brightness-125 transition-all' : ''
       } ${className}`}
     >
-      <div className="p-3 rounded-full flex justify-center items-center bg-violet-400/25">
-        {cloneElement(icon, { className: 'text-3xl text-violet-400' })}
+      <div className="p-3 rounded-full flex justify-center items-center bg-violet-500/25">
+        {cloneElement(icon, { className: 'text-3xl text-violet-500' })}
       </div>
       <div>
         <h4 className="text-gray-200">{value}</h4>

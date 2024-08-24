@@ -10,9 +10,10 @@ import { motion } from 'framer-motion'
 
 type WorkoutProps = {
   workout: WorkoutInDb
+  selectedExercises?: Set<string>
 }
 
-export default function Workout({ workout }: WorkoutProps) {
+export default function Workout({ workout, selectedExercises }: WorkoutProps) {
   const { workoutName, location, notes, supersets, exercises, date } = workout
 
   const formattedExercises = formatExercises(exercises, supersets)
@@ -23,14 +24,13 @@ export default function Workout({ workout }: WorkoutProps) {
 
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, scale: 0.75 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay: 0.15 }}
+      transition={{ duration: 0.25 }}
       viewport={{ once: true }}
-      className="w-full rounded-xl bg-gray-700"
+      className="w-full rounded-xl bg-gray-800"
     >
-      <div className="bg-violet-400 px-4 py-2 rounded-t-xl flex items-center justify-between">
+      <div className="bg-violet-500 px-4 py-2 rounded-t-xl flex items-center justify-between">
         <h2 className="font-medium text-lg">{workoutName}</h2>
         <h2 className="font-medium">
           {' '}
@@ -48,7 +48,7 @@ export default function Workout({ workout }: WorkoutProps) {
           {location && (
             <h3 className="flex gap-2 items-center mb-6">
               <span className="font-medium">
-                <FaLocationDot className="text-violet-400" />
+                <FaLocationDot className="text-violet-500" />
               </span>{' '}
               {location}
             </h3>
@@ -57,62 +57,73 @@ export default function Workout({ workout }: WorkoutProps) {
 
         <ul className="flex flex-col gap-6 mb-6">
           {formattedExercises.map((exercise, i) => {
+            const { name, supersets, sets, id } = exercise
             return (
               <li
                 key={i}
                 className="flex flex-col gap-4"
               >
                 <h4 className="font-medium text-lg">
-                  {exercise.name}{' '}
-                  {exercise.supersets.get(exercise.id) && (
+                  <span
+                    className={`${
+                      selectedExercises?.has(name)
+                        ? 'py-1 px-2 bg-violet-500 rounded-md transition-all'
+                        : ''
+                    }`}
+                  >
+                    {name}
+                  </span>{' '}
+                  {supersets.get(id) && (
                     <Fragment>
                       <p className="font-medium -mt-1 text-sm text-gray-400">
-                        Superset with:{' '}
-                        {exercise.supersets
-                          .get(exercise.id)
-                          ?.map((exerciseName, i) => {
-                            return <span key={i}>{exerciseName}</span>
-                          })}
+                        Superset with: {supersets.get(id)?.join(', ')}
                       </p>
                     </Fragment>
                   )}
                 </h4>
 
                 <ul className="text-gray-300 flex flex-col gap-2">
-                  {exercise.sets.map((set, i) => {
+                  {sets.map((set, i) => {
                     return Object.entries(set).map(([weight, { sets }], i) => {
                       return (
                         <li key={i}>
                           <ul className="flex justify-between items-center flex-wrap">
                             <div className="flex items-center gap-2">
                               {sets.map((set, i) => {
+                                const {
+                                  inDropset,
+                                  times,
+                                  reps,
+                                  partialReps,
+                                  rpe,
+                                } = set
                                 return (
                                   <Fragment key={i}>
                                     <li
                                       className={`flex items-center gap-1 py-0.5 px-2 ${
-                                        set.inDropset
-                                          ? 'bg-gray-600 outline outline-gray-800'
-                                          : 'bg-gray-600'
+                                        inDropset
+                                          ? 'bg-gray-700 outline outline-gray-800'
+                                          : 'bg-gray-700'
                                       } rounded-md select-none`}
                                     >
-                                      <span>{set.times}</span>
+                                      <span>{times}</span>
                                       <span className="text-gray-400 text-xs">
                                         <FaXmark />
                                       </span>
                                       <span>
-                                        {set.reps}
+                                        {reps}
 
-                                        {set.partialReps !== 0 && (
+                                        {partialReps !== 0 && (
                                           <span className="ml-1 text-gray-400">
                                             {'{'}
-                                            {set.partialReps}
+                                            {partialReps}
                                             {'}'}
                                           </span>
                                         )}
                                       </span>
-                                      {set.rpe && (
+                                      {rpe && (
                                         <span className="ml-1 text-gray-400">
-                                          [{set.rpe}]
+                                          [{rpe}]
                                         </span>
                                       )}
                                     </li>
@@ -121,7 +132,7 @@ export default function Workout({ workout }: WorkoutProps) {
                               })}
                             </div>
                             {parseInt(weight) !== 0 && (
-                              <span className="bg-gray-600 rounded-md  text-sm p-1">
+                              <span className="bg-gray-700 rounded-md  text-sm p-1">
                                 {weight} lbs.
                               </span>
                             )}
@@ -138,7 +149,7 @@ export default function Workout({ workout }: WorkoutProps) {
         {notes && (
           <Fragment>
             <h3 className="mb-1">Notes</h3>
-            <div className=" bg-gray-600 rounded-md py-6 px-3 mb-4">
+            <div className="bg-gray-700 rounded-md py-6 px-3 mb-4">
               <p className="text-gray-200">{notes}</p>
             </div>
           </Fragment>

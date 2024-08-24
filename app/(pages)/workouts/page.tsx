@@ -31,7 +31,7 @@ export default async function Workouts() {
         Filter through your workouts, or{' '}
         <Link
           href="/workouts/new"
-          className="font-medium hover:text-violet-400 transition-all underline underline-offset-2"
+          className="font-medium hover:text-violet-500 transition-all underline underline-offset-2"
         >
           create a new one
         </Link>

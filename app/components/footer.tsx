@@ -29,7 +29,7 @@ export default function Footer() {
           return (
             <li key={link.href}>
               <a
-                className="hover:text-violet-400 transition-colors"
+                className="hover:text-violet-500 transition-colors"
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"

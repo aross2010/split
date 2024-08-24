@@ -78,6 +78,9 @@ export default function WorkoutForm({
           },
         ]
   )
+  const [existingWorkout, setExistingWorkout] = useState<
+    WorkoutInDb | undefined
+  >(workout)
   const [activeSuperSet, setActiveSuperSet] = useState<Exercise[]>([])
   const [superSetToAppend, setSuperSetToAppend] = useState<Exercise[] | null>(
     null
@@ -99,15 +102,19 @@ export default function WorkoutForm({
       exercises,
     }
     try {
-      if (!workout) {
+      if (!existingWorkout) {
         const res = await axios.post('/api/workouts', workoutData)
         toast.success('Workout saved successfully.')
+        setExistingWorkout(res.data)
         if (submitType === 'exit') {
           router.replace('/workouts')
           router.refresh()
         }
       } else {
-        const res = await axios.put(`/api/workouts/${workout.id}`, workoutData)
+        const res = await axios.put(
+          `/api/workouts/${existingWorkout.id}`,
+          workoutData
+        )
         toast.success('Workout updated successfully.')
         if (submitType === 'exit') {
           router.replace('/workouts')
@@ -230,6 +237,7 @@ export default function WorkoutForm({
             'input[type="text"]'
           ) as HTMLInputElement
           exercieNameInput?.focus()
+          exercieNameInput?.click()
         }
       }
     }, 50)
@@ -354,7 +362,7 @@ export default function WorkoutForm({
                   <ul
                     className={`flex items-center gap-2 ${
                       superSetToAppend === superset
-                        ? 'bg-violet-400/75 rounded-md'
+                        ? 'bg-violet-500/75 rounded-md'
                         : ''
                     }`}
                   >
@@ -459,14 +467,14 @@ export default function WorkoutForm({
         <Button
           type="button"
           onClick={handleAddExercise}
-          className="bg-gray-700 hover:bg-violet-400 active:bg-violet-400 text-sm"
+          className="bg-gray-800 hover:bg-violet-500 active:bg-violet-500 text-sm"
         >
           Add Exercise
         </Button>
         <Button
           type="button"
           ref={supersetBtn}
-          className="bg-gray-700 text-sm"
+          className="bg-gray-800 text-sm"
         >
           Supersets
         </Button>
@@ -488,21 +496,21 @@ export default function WorkoutForm({
           onChange={(e) =>
             setData((prev) => ({ ...prev, notes: e.target.value }))
           }
-          className="rounded-md h-32 bg-gray-700 p-3 outline-none focus:outline-violet-400 focus:bg-violet-400/25 focus:ring-2 focus:ring-violet-400 shadow-sm"
+          className="rounded-md h-32 bg-gray-800 p-3 outline-none focus:outline-violet-500 focus:bg-violet-500/25 focus:ring-2 focus:ring-violet-500 shadow-sm"
         />
       </div>
       <div className="grid grid-cols-2 gap-2">
         <SubmitButton
           disabled={submitting}
           value={'save'}
-          className="text-sm bg-gray-700 flex justify-center [&:not(:disabled)]:hover:bg-green-500 [&:not(:disabled)]:active:bg-green-500"
+          className="text-sm bg-gray-800 flex justify-center [&:not(:disabled)]:hover:bg-green-500 [&:not(:disabled)]:active:bg-green-500"
         >
           Save
         </SubmitButton>
         <SubmitButton
           disabled={submitting}
           value={'exit'}
-          className="text-sm bg-gray-700 flex justify-center [&:not(:disabled)]:hover:bg-green-500 [&:not(:disabled)]:active:bg-green-500"
+          className="text-sm bg-gray-800 flex justify-center [&:not(:disabled)]:hover:bg-green-500 [&:not(:disabled)]:active:bg-green-500"
         >
           Save & Exit
         </SubmitButton>
