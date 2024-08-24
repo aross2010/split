@@ -233,7 +233,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
               delay: 0.25,
             }}
             key={filterType}
-            className="bg-gray-600 py-1 px-3 flex items-center gap-2 rounded-full"
+            className="bg-gray-800 py-1 px-3 flex items-center gap-2 rounded-full"
           >
             {filterValue}{' '}
             <button
@@ -337,7 +337,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
           <Button
             type="button"
             onClick={() => setMaxDisplayedWorkouts((prev) => prev + 25)}
-            className="mt-4 text-sm !w-fit flex items-center gap-1 !px-4 !py-2 bg-gray-600"
+            className="mt-4 text-sm !w-fit flex items-center gap-1 !px-4 !py-2 bg-gray-800"
           >
             Load More <FaArrowDown className="text-sm text-gray-200" />
           </Button>
