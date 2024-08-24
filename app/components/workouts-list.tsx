@@ -209,7 +209,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
                 delay: 0.25,
               }}
               key={exercise}
-              className="bg-gray-600 py-1 px-3 flex items-center gap-2 rounded-full"
+              className="bg-gray-800 py-1 px-3 flex items-center gap-2 rounded-full"
             >
               {exercise}{' '}
               <button
@@ -289,7 +289,7 @@ export default function WorkoutsList({ workouts, filtersData }: WorkoutsProps) {
                   })
                 }}
                 type="button"
-                className="bg-gray-700 py-1 px-3 flex items-center gap-2 rounded-full text-gray-400 hover:bg-red-500 hover:text-gray-50 transition-all"
+                className="bg-gray-800 py-1 px-3 flex items-center gap-2 rounded-full text-gray-400 hover:bg-red-500 hover:text-gray-50 transition-all"
               >
                 Clear all
               </button>

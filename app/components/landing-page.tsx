@@ -40,28 +40,29 @@ const benefits = [
 
 const demos = [
   {
-    title: 'Your Workout Data, Visualized',
-    description:
-      'Seeing progress in the gym has never been simpler with our interactive charts, designed to make data clear and accessible',
-    image: dashboard,
-  },
-  {
     title: 'Find Any Workout With a Click',
     description:
       'Filter through your workout history with ease, finding the exact workout you need in seconds to continue making gains',
     image: filters,
   },
   {
-    title: 'Individualized Exercise Data',
+    title: 'Your Workout Data, Visualized',
     description:
-      'Get personalized data for each exercise you perform, making goal setting for each execise tailored to your needs',
-    image: exercises,
+      'Seeing progress in the gym has never been simpler with our interactive charts, designed to make data clear and accessible',
+    image: dashboard,
   },
+
   {
     title: 'Log Workouts on the Go',
     description:
       'Log workouts on any device, at any time with ease, so you never miss logging a workout and tracking your progress',
     image: log,
+  },
+  {
+    title: 'Individualized Exercise Data',
+    description:
+      'Get personalized data for each exercise you perform, making goal setting for each execise tailored to your needs',
+    image: exercises,
   },
 ]
 
