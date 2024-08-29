@@ -109,7 +109,7 @@ export default function LandingPage() {
     return (
       <div
         key={i}
-        className={`grid grid-cols-2 gap-16`}
+        className={`grid lg:grid-cols-2 grid-cols-1 gap-16`}
       >
         <motion.div
           initial={{ opacity: 0, x: i % 2 == 0 ? 25 : -25 }}
@@ -117,13 +117,13 @@ export default function LandingPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.25, delay: 0.5 }}
           className={`flex items-center justify-center ${
-            i % 2 == 0 ? 'order-1' : '-order-1'
+            i % 2 == 0 ? 'lg:order-1' : 'lg:-order-1'
           }`}
         >
           <Image
             src={demo.image}
             alt={demo.title}
-            className="h-[450px] w-auto"
+            className="xl:h-[450px] xl:w-auto max-h-[350px] w-auto"
           />
         </motion.div>
         <motion.div
@@ -131,11 +131,11 @@ export default function LandingPage() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.25, delay: 0.5 }}
-          className={`flex flex-col gap-6 items-center justify-center ${
-            i % 2 != 0 ? 'order-1' : '-order-1'
+          className={`flex flex-col gap-6 items-center justify-center -order-1 ${
+            i % 2 != 0 ? 'lg:order-1' : 'lg:-order-1'
           }`}
         >
-          <h2 className="text-5xl text-white font-semibold text-center">
+          <h2 className="lg:text-5xl text-4xl text-white font-semibold text-center">
             {demo.title}
           </h2>
           <p className="text-gray-400 text-center font-medium text-lg">
@@ -169,7 +169,7 @@ export default function LandingPage() {
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.25 }}
-        className="text-6xl mt-8 mb-8 text-center font-bold xl:px-48"
+        className="lg:text-6xl text-5xl mt-8 mb-8 text-center font-bold xl:px-48"
       >
         Reshaping your <span className="text-violet-500">fitness</span> journey.
       </motion.h1>
@@ -178,7 +178,7 @@ export default function LandingPage() {
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.25, delay: 0.25 }}
-        className="text-gray-400 text-xl text-center mb-8"
+        className="text-gray-400 lg:text-xl text-lg text-center mb-8"
       >
         Log workouts. Track progress. Get results.
       </motion.h3>
@@ -199,16 +199,18 @@ export default function LandingPage() {
         <button
           type="button"
           onClick={handleDemoLogin}
-          className="text-gray-400 text-lg flex items-center gap-2 group hover:text-gray-100"
+          className="text-gray-400 lg:text-lg text-base flex items-center gap-2 group hover:text-gray-100"
         >
           Demo Login{' '}
           <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
         </button>
       </motion.div>
-      <div className="grid grid-cols-3 w-full gap-4 text-lg">
+      <div className="grid sm:grid-cols-3 grid-cols-1 auto-rows-fr w-full gap-4 text-lg">
         {renderedBenefits}
       </div>
-      <div className="flex flex-col gap-36 my-24">{renderedDemos}</div>
+      <div className="flex flex-col lg:gap-36 gap-20 my-24">
+        {renderedDemos}
+      </div>
       <div className="mb-24 flex flex-col items-center">
         <FaQuoteLeft className="text-5xl text-violet-500" />
 
@@ -217,7 +219,7 @@ export default function LandingPage() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="font-semibold text-white py-6 text-3xl mb-4 px-24 text-center"
+          className="font-semibold text-white py-6 lg:text-3xl text-2xl mb-4 lg:px-24 sm:px-6 text-center"
         >
           The simplest, most effective way to track your workouts and make
           progress in the gym.
